@@ -35,6 +35,11 @@ class BusinessIntent(Base, UUIDMixin, TimestampMixin):
     )
     intent_key: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
 
+    # Human-friendly question/label shown in the owner's Q&A picker.
+    # Set for business-type-pack Q&As and owner-added custom Q&As.
+    # Null for legacy global intents (UI falls back to the global name).
+    title: Mapped[str | None] = mapped_column(String(300), nullable=True)
+
     enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     # Default reply (English / fallback)
     reply_text: Mapped[str] = mapped_column(Text, nullable=False)

@@ -1,0 +1,249 @@
+{
+  "business_type": "restaurant",
+  "label": "Restaurant / Dhaba / Cafe",
+  "languages": ["en", "hi", "hinglish"],
+  "qa": [
+    {
+      "key": "rest_menu",
+      "category": "inquiry",
+      "priority": 6,
+      "question": {
+        "en": "Can you send the menu?",
+        "hi": "मेन्यू भेज दीजिए",
+        "hinglish": "Menu bhej do"
+      },
+      "answer": {
+        "en": "🍴 Sure! Here's today's menu. Reply with items + quantity to order.",
+        "hi": "🍴 ज़रूर! ये रहा आज का मेन्यू। ऑर्डर के लिए आइटम और मात्रा भेजें।",
+        "hinglish": "🍴 Zaroor! Ye raha aaj ka menu. Order ke liye item aur quantity bhej do."
+      },
+      "keywords": {
+        "english": ["menu", "menu card", "food list", "what's available", "dishes", "items"],
+        "hindi": ["मेन्यू", "मेनू", "खाने की लिस्ट", "क्या क्या है", "व्यंजन", "खाना क्या"],
+        "hinglish": ["menu", "menu bhejo", "menu card", "khane ki list", "kya kya hai", "kya milta", "khana kya", "dishes", "item list"]
+      },
+      "patterns": ["(?i)\\bmenu\\b", "(?i)kya\\s*kya\\s*(hai|milta)", "(?i)food\\s*list"],
+      "emojis": ["🍴", "🍽️", "📋"]
+    },
+    {
+      "key": "rest_price",
+      "category": "inquiry",
+      "priority": 5,
+      "question": {
+        "en": "How much for this dish?",
+        "hi": "इसका दाम कितना है?",
+        "hinglish": "Iska rate kitna hai?"
+      },
+      "answer": {
+        "en": "Tell me the dish name — I'll share the price right away 😊",
+        "hi": "डिश का नाम बता दीजिए — मैं तुरंत दाम बता देता हूँ 😊",
+        "hinglish": "Dish ka naam batao — main turant rate bata deta hoon 😊"
+      },
+      "keywords": {
+        "english": ["price", "rate", "cost", "how much", "mrp", "per plate"],
+        "hindi": ["कीमत", "दाम", "रेट", "कितना", "कितने का", "प्लेट का", "भाव"],
+        "hinglish": ["kitna", "kitne ka", "kitne ki", "rate", "daam", "kya rate", "rate kya", "price kya", "plate ka", "kitne me", "half kitne", "full kitne"]
+      },
+      "patterns": ["(?i)kitne?\\s+(ka|ki|me|mein)\\b", "(?i)\\brate\\b", "(?i)how\\s+much", "(?i)(half|full|plate)\\s*kitne", "(?i)कितन", "(?i)दाम", "(?i)रेट", "(?i)कीमत", "(?i)भाव"],
+      "emojis": ["💰", "₹"]
+    },
+    {
+      "key": "rest_delivery",
+      "category": "service",
+      "priority": 6,
+      "question": {
+        "en": "Do you deliver? My area?",
+        "hi": "क्या डिलीवरी होती है? मेरे इलाके में?",
+        "hinglish": "Delivery hoti hai? Mere area me?"
+      },
+      "answer": {
+        "en": "🛵 Yes! Free delivery within 4 km on orders above ₹150. Share your location to confirm your area.",
+        "hi": "🛵 जी हाँ! ₹150 से ऊपर के ऑर्डर पर 4 km तक फ्री डिलीवरी। अपनी लोकेशन भेजें, इलाका कन्फर्म कर देंगे।",
+        "hinglish": "🛵 Ji haan! ₹150 se upar ke order pe 4 km tak free delivery. Apni location bhejo, area confirm kar denge."
+      },
+      "keywords": {
+        "english": ["delivery", "home delivery", "deliver", "do you deliver", "delivery area", "doorstep"],
+        "hindi": ["डिलीवरी", "होम डिलीवरी", "घर पर", "घर तक", "इलाके में", "पहुंचाओगे"],
+        "hinglish": ["delivery", "home delivery", "ghar pe", "ghar par", "ghar tak", "area me", "ilake me", "deliver karte", "pahuchaoge", "bhej doge"]
+      },
+      "patterns": ["(?i)home\\s*delivery", "(?i)\\bdeliver", "(?i)ghar\\s*(pe|par|tak)", "(?i)(area|ilake)\\s*me"],
+      "emojis": ["🛵", "🚚", "🏠"]
+    },
+    {
+      "key": "rest_table_booking",
+      "category": "booking",
+      "priority": 6,
+      "question": {
+        "en": "Can I book a table?",
+        "hi": "क्या टेबल बुक कर सकते हैं?",
+        "hinglish": "Table book kar sakte hai?"
+      },
+      "answer": {
+        "en": "🪑 Of course! Tell me the date, time, and number of people — I'll reserve your table.",
+        "hi": "🪑 ज़रूर! तारीख, समय और कितने लोग — बता दीजिए, मैं टेबल बुक कर देता हूँ।",
+        "hinglish": "🪑 Zaroor! Date, time aur kitne log — batao, main table reserve kar deta hoon."
+      },
+      "keywords": {
+        "english": ["table", "book table", "table booking", "reservation", "reserve", "book a table", "seats"],
+        "hindi": ["टेबल", "टेबल बुक", "बुकिंग", "टेबल चाहिए", "रिजर्व", "जगह", "सीट"],
+        "hinglish": ["table", "table book", "table booking", "table chahiye", "table milega", "table hai", "reservation", "reserve", "jagah hai", "seat", "booking karni"]
+      },
+      "patterns": ["(?i)\\btable\\b", "(?i)reserv", "(?i)\\bbooking\\b"],
+      "emojis": ["🪑", "🍽️"]
+    },
+    {
+      "key": "rest_timing",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "What time do you open / close?",
+        "hi": "कितने बजे तक खुला है?",
+        "hinglish": "Kitne baje tak khula hai?"
+      },
+      "answer": {
+        "en": "🕐 Open daily 11:00 AM to 11:00 PM. Kitchen takes last orders at 10:30 PM.",
+        "hi": "🕐 रोज़ सुबह 11 बजे से रात 11 बजे तक खुला। आखिरी ऑर्डर रात 10:30 तक।",
+        "hinglish": "🕐 Roz subah 11 baje se raat 11 baje tak khula. Last order raat 10:30 tak."
+      },
+      "keywords": {
+        "english": ["open", "close", "closed", "timing", "time", "hours", "till what time"],
+        "hindi": ["खुला", "बंद", "समय", "टाइम", "कितने बजे", "कब तक", "कब खुलता"],
+        "hinglish": ["khula", "khula hai", "band", "band hai", "kab tak", "kitne baje", "kitne baje tak", "time kya", "timing", "open ho", "kab khulta"]
+      },
+      "patterns": ["(?i)kitne?\\s+baje", "(?i)kab\\s+(tak|khul|band)", "(?i)\\bopen\\b", "(?i)\\bclose", "(?i)timing"],
+      "emojis": ["🕐", "⏰"]
+    },
+    {
+      "key": "rest_location",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "Where are you located?",
+        "hi": "आप कहाँ पर हैं?",
+        "hinglish": "Aap kaha pe ho?"
+      },
+      "answer": {
+        "en": "📍 Main Road, near the clock tower. Reply and I'll send a live location pin.",
+        "hi": "📍 मेन रोड, घंटाघर के पास। मैसेज करें, मैं लाइव लोकेशन भेज देता हूँ।",
+        "hinglish": "📍 Main Road, ghantaghar ke paas. Message karo, main live location bhej deta hoon."
+      },
+      "keywords": {
+        "english": ["address", "location", "where", "where are you", "map", "direction"],
+        "hindi": ["पता", "कहाँ", "कहां", "लोकेशन", "रास्ता", "कैसे आएं"],
+        "hinglish": ["address", "kaha", "kahan", "kaha pe", "location", "kaise aaye", "raasta", "rasta", "map bhejo"]
+      },
+      "patterns": ["(?i)\\bkah[aā]n?\\b", "(?i)address", "(?i)location", "(?i)\\bwhere\\b"],
+      "emojis": ["📍", "🗺️"]
+    },
+    {
+      "key": "rest_order",
+      "category": "order",
+      "priority": 6,
+      "question": {
+        "en": "I want to order food",
+        "hi": "मुझे खाना ऑर्डर करना है",
+        "hinglish": "Mujhe khana order karna hai"
+      },
+      "answer": {
+        "en": "🛒 Yum! Type your order like \"2 butter naan, 1 paneer\" — I'll total it and confirm pickup/delivery.",
+        "hi": "🛒 बढ़िया! ऐसे लिखें \"2 बटर नान, 1 पनीर\" — मैं टोटल करके पिकअप/डिलीवरी कन्फर्म करता हूँ।",
+        "hinglish": "🛒 Badhiya! Aise likho \"2 butter naan, 1 paneer\" — main total karke pickup/delivery confirm karta hoon."
+      },
+      "keywords": {
+        "english": ["order", "want to order", "order food", "parcel", "takeaway", "take away", "packing"],
+        "hindi": ["ऑर्डर", "खाना ऑर्डर", "पार्सल", "पैक करा दो", "ले जाना है", "बंधवाना"],
+        "hinglish": ["order", "order karna", "khana order", "parcel", "parcel karna", "takeaway", "take away", "pack kar do", "le jana hai", "bandhwana"]
+      },
+      "patterns": ["(?i)\\border\\b", "(?i)parcel", "(?i)take\\s*away", "(?i)pack\\s*kar"],
+      "emojis": ["🛒", "🥡", "📝"]
+    },
+    {
+      "key": "rest_veg_nonveg",
+      "category": "inquiry",
+      "priority": 4,
+      "question": {
+        "en": "Do you have veg / Jain food?",
+        "hi": "क्या वेज / जैन खाना है?",
+        "hinglish": "Veg / Jain khana hai kya?"
+      },
+      "answer": {
+        "en": "🟢 Yes — we have a full veg menu, and Jain (no onion/garlic) on request. Non-veg also available.",
+        "hi": "🟢 जी हाँ — पूरा वेज मेन्यू है, और जैन (बिना प्याज़/लहसुन) रिक्वेस्ट पर। नॉन-वेज भी उपलब्ध।",
+        "hinglish": "🟢 Ji haan — pura veg menu hai, aur Jain (bina pyaaz/lehsun) request pe. Non-veg bhi available."
+      },
+      "keywords": {
+        "english": ["veg", "vegetarian", "non veg", "nonveg", "jain", "halal", "egg", "pure veg"],
+        "hindi": ["वेज", "शाकाहारी", "नॉन वेज", "मांसाहारी", "जैन", "बिना प्याज", "अंडा"],
+        "hinglish": ["veg", "veg hai", "non veg", "nonveg", "jain", "jain khana", "bina pyaaz", "halal", "anda", "pure veg", "shakahari"]
+      },
+      "patterns": ["(?i)\\bveg\\b", "(?i)non[\\s-]*veg", "(?i)\\bjain\\b", "(?i)halal", "(?i)bina\\s*pyaa?z"],
+      "emojis": ["🟢", "🔴", "🥬"]
+    },
+    {
+      "key": "rest_payment",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "Can I pay by UPI / card?",
+        "hi": "UPI / कार्ड से पेमेंट कर सकते हैं?",
+        "hinglish": "UPI / card se payment kar sakte hai?"
+      },
+      "answer": {
+        "en": "💳 Yes — UPI (GPay/PhonePe/Paytm), cards, and cash all accepted.",
+        "hi": "💳 जी हाँ — UPI (GPay/PhonePe/Paytm), कार्ड और कैश — सब चलता है।",
+        "hinglish": "💳 Ji haan — UPI (GPay/PhonePe/Paytm), card aur cash — sab chalta hai."
+      },
+      "keywords": {
+        "english": ["payment", "pay", "upi", "gpay", "phonepe", "paytm", "card", "cash", "online payment"],
+        "hindi": ["पेमेंट", "भुगतान", "यूपीआई", "कार्ड", "नकद", "कैश", "ऑनलाइन"],
+        "hinglish": ["payment", "upi", "gpay", "phonepe", "phone pe", "paytm", "card", "cash", "online payment", "kaise pay"]
+      },
+      "patterns": ["(?i)\\bupi\\b", "(?i)online\\s*pay", "(?i)phone\\s*pe", "(?i)paytm", "(?i)\\bcard\\b"],
+      "emojis": ["💳", "📲"]
+    },
+    {
+      "key": "rest_min_order",
+      "category": "info",
+      "priority": 3,
+      "question": {
+        "en": "Minimum order for delivery?",
+        "hi": "डिलीवरी के लिए मिनिमम ऑर्डर कितना?",
+        "hinglish": "Delivery ke liye minimum order kitna?"
+      },
+      "answer": {
+        "en": "Minimum ₹150 for delivery. Free above ₹150 within 4 km; ₹25 below that.",
+        "hi": "डिलीवरी के लिए मिनिमम ₹150। 4 km में ₹150 से ऊपर फ्री; उससे कम पर ₹25।",
+        "hinglish": "Delivery ke liye minimum ₹150. 4 km me ₹150 se upar free; usse kam pe ₹25."
+      },
+      "keywords": {
+        "english": ["minimum order", "min order", "free delivery", "delivery charge", "delivery free"],
+        "hindi": ["मिनिमम ऑर्डर", "फ्री डिलीवरी", "डिलीवरी चार्ज", "कितने के ऊपर"],
+        "hinglish": ["minimum order", "min order", "free delivery", "delivery free", "delivery charge", "kitne ke upar", "charge lagega"]
+      },
+      "patterns": ["(?i)min(imum)?\\s*order", "(?i)free\\s*delivery", "(?i)delivery\\s*(charge|free)"],
+      "emojis": ["🆓"]
+    },
+    {
+      "key": "rest_greeting",
+      "category": "greeting",
+      "priority": 1,
+      "question": {
+        "en": "Hi / Hello",
+        "hi": "नमस्ते",
+        "hinglish": "Namaste / Hello"
+      },
+      "answer": {
+        "en": "Namaste! 🙏 Welcome. Would you like the menu, to order, or to book a table?",
+        "hi": "नमस्ते! 🙏 स्वागत है। मेन्यू चाहिए, ऑर्डर करना है, या टेबल बुक करनी है?",
+        "hinglish": "Namaste! 🙏 Swagat hai. Menu chahiye, order karna hai, ya table book karni hai?"
+      },
+      "keywords": {
+        "english": ["hi", "hello", "hey", "good morning", "good evening"],
+        "hindi": ["नमस्ते", "नमस्कार", "राम राम", "प्रणाम"],
+        "hinglish": ["namaste", "namaskar", "ram ram", "hello", "helo", "salaam", "salam"]
+      },
+      "patterns": ["(?i)^\\s*(hi|hii|hello|helo|hey|namaste|namaskar)\\b"],
+      "emojis": ["👋", "🙏"]
+    }
+  ]
+}

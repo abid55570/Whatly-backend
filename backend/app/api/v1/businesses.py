@@ -1,4 +1,6 @@
 """Business profile, WhatsApp connection, intent CRUD endpoints."""
+import re
+import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -19,9 +21,11 @@ from app.schemas.intent import (
     BusinessIntentResponse,
     BusinessIntentsBulkRequest,
     BusinessIntentUpdate,
+    CustomQACreate,
 )
 from app.schemas.subscription import SubscriptionResponse
 from app.services.billing import create_trial_subscription
+from app.services.intents import pack_intent_definitions
 from app.services.matching import MatchingEngine, get_matching_engine
 from app.services.onboarding import (
     get_my_business,
@@ -30,6 +34,38 @@ from app.services.onboarding import (
 )
 
 router = APIRouter(prefix="/businesses", tags=["businesses"])
+
+# Fillers dropped when deriving match keywords from an owner's question.
+_QA_STOPWORDS = frozenset({
+    "a", "an", "the", "is", "are", "am", "do", "does", "you", "your", "my",
+    "i", "me", "to", "of", "and", "or", "for", "can", "will", "what", "how",
+    "hai", "hain", "ho", "ka", "ke", "ki", "ko", "ye", "yeh", "wo", "woh",
+    "na", "se", "par", "pe", "aap", "hum", "mera", "meri", "kya", "hota",
+})
+
+
+def _derive_keywords(question: str, extra: list[str]) -> list[str]:
+    """Build match keywords from an owner's free-text question.
+
+    Keeps the full question as a phrase + content words (drops fillers),
+    plus any explicit keywords the owner supplied. Deduped, capped.
+    """
+    out: list[str] = []
+    phrase = question.strip().lower()
+    if phrase:
+        out.append(phrase)
+    for tok in re.split(r"[^\w]+", phrase, flags=re.UNICODE):
+        if not tok or tok in _QA_STOPWORDS:
+            continue
+        if tok.isascii() and len(tok) < 3:  # skip tiny roman tokens
+            continue
+        out.append(tok)
+    for kw in extra:
+        k = kw.strip().lower()
+        if k:
+            out.append(k)
+    # Dedupe preserving order, cap at 20
+    return list(dict.fromkeys(out))[:20]
 
 
 # ============================================================
@@ -105,18 +141,22 @@ def _intent_to_response(
     bi: BusinessIntent, engine: MatchingEngine
 ) -> BusinessIntentResponse:
     global_def = engine.library.get(bi.intent_key)
+    is_custom = bi.intent_key.startswith(("custom_", "sheet_faq_"))
     return BusinessIntentResponse(
         id=bi.id,
         intent_key=bi.intent_key,
+        title=bi.title,
         enabled=bi.enabled,
         reply_text=bi.reply_text,
         reply_translations=dict(bi.reply_translations or {}),
         media_url=bi.media_url,
         custom_keywords=list(bi.custom_keywords),
         priority=bi.priority,
-        name=global_def.name if global_def else None,
+        # Prefer the stored question label (pack/custom); fall back to global lib.
+        name=bi.title or (global_def.name if global_def else None),
         description=global_def.description if global_def else None,
         category=global_def.category if global_def else None,
+        is_custom=is_custom,
     )
 
 
@@ -398,9 +438,24 @@ async def bulk_configure_intents(
     business = await get_my_business_or_404(db, current_user)
     engine = get_matching_engine()
 
-    # Validate every intent_key exists in the global library
+    biz_type = (
+        business.business_type.value
+        if hasattr(business.business_type, "value")
+        else str(business.business_type)
+    )
+    pack_keys = set(pack_intent_definitions(biz_type).keys())
+
+    # A key is valid if it's a global intent, a Q&A from this business's pack,
+    # or an owner-added / sheet-derived custom intent.
+    def _known(key: str) -> bool:
+        return (
+            engine.library.get(key) is not None
+            or key in pack_keys
+            or key.startswith(("custom_", "sheet_faq_"))
+        )
+
     for cfg in body.intents:
-        if engine.library.get(cfg.intent_key) is None:
+        if not _known(cfg.intent_key):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Unknown intent key: {cfg.intent_key}",
@@ -418,6 +473,7 @@ async def bulk_configure_intents(
             bi = BusinessIntent(
                 business_id=business.id,
                 intent_key=cfg.intent_key,
+                title=cfg.title,
                 enabled=cfg.enabled,
                 reply_text=cfg.reply_text,
                 reply_translations=cfg.reply_translations or {},
@@ -427,6 +483,8 @@ async def bulk_configure_intents(
             )
             db.add(bi)
         else:
+            if cfg.title is not None:
+                bi.title = cfg.title
             bi.enabled = cfg.enabled
             bi.reply_text = cfg.reply_text
             bi.reply_translations = cfg.reply_translations or {}
@@ -439,6 +497,39 @@ async def bulk_configure_intents(
     for bi in result:
         await db.refresh(bi)
     return [_intent_to_response(bi, engine) for bi in result]
+
+
+@router.post(
+    "/me/intents/custom",
+    response_model=BusinessIntentResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def add_custom_intent(
+    body: CustomQACreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> BusinessIntentResponse:
+    """Owner adds their own Q&A (a question the packs don't cover).
+
+    We derive match keywords from the question text (plus any explicit ones),
+    so the bot can fire this reply when a customer asks something similar.
+    """
+    business = await get_my_business_or_404(db, current_user)
+    keywords = _derive_keywords(body.question, body.keywords)
+    bi = BusinessIntent(
+        business_id=business.id,
+        intent_key=f"custom_{uuid.uuid4().hex[:8]}",
+        title=body.question,
+        enabled=True,
+        reply_text=body.answer,
+        reply_translations=body.reply_translations or {},
+        custom_keywords=keywords,
+        priority=5,
+    )
+    db.add(bi)
+    await db.commit()
+    await db.refresh(bi)
+    return _intent_to_response(bi, get_matching_engine())
 
 
 @router.patch(

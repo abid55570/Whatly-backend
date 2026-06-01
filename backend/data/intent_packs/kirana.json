@@ -1,0 +1,271 @@
+{
+  "business_type": "kirana",
+  "label": "Kirana / General Store",
+  "languages": ["en", "hi", "hinglish"],
+  "qa": [
+    {
+      "key": "kirana_price",
+      "category": "inquiry",
+      "priority": 5,
+      "question": {
+        "en": "How much does this cost?",
+        "hi": "इसका दाम कितना है?",
+        "hinglish": "Iska rate kitna hai?"
+      },
+      "answer": {
+        "en": "Please tell me the item name and quantity — I'll share the exact price right away 😊",
+        "hi": "बस आइटम का नाम और कितना चाहिए बता दीजिए — मैं तुरंत दाम बता देता हूँ 😊",
+        "hinglish": "Aap bas item ka naam aur kitna chahiye batao — main turant rate bata deta hoon 😊"
+      },
+      "keywords": {
+        "english": ["price", "prices", "rate", "rates", "cost", "how much", "mrp", "amount"],
+        "hindi": ["कीमत", "दाम", "रेट", "कितना", "कितने का", "कितने की", "भाव", "मूल्य"],
+        "hinglish": ["kitna", "kitne ka", "kitne ki", "kitne me", "kitne mein", "rate", "daam", "bhav", "kya rate", "rate kya", "price kya", "kitna hai", "kitne paise"]
+      },
+      "patterns": ["(?i)kitne?\\s+(ka|ki|me|mein)\\b", "(?i)\\brate\\b", "(?i)how\\s+much", "(?i)(daam|bhav).*(kya|kitna)", "(?i)कितन", "(?i)दाम", "(?i)रेट", "(?i)कीमत", "(?i)भाव"],
+      "emojis": ["💰", "₹", "💵"]
+    },
+    {
+      "key": "kirana_timing",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "What time do you open / close?",
+        "hi": "दुकान कितने बजे खुलती है?",
+        "hinglish": "Dukan kitne baje khulti hai?"
+      },
+      "answer": {
+        "en": "We're open every day, 8:00 AM to 10:00 PM 🕐",
+        "hi": "हम रोज़ सुबह 8 बजे से रात 10 बजे तक खुले रहते हैं 🕐",
+        "hinglish": "Hum roz subah 8 baje se raat 10 baje tak khule rehte hain 🕐"
+      },
+      "keywords": {
+        "english": ["open", "close", "closed", "timing", "timings", "time", "hours", "shop open"],
+        "hindi": ["खुला", "खुली", "बंद", "समय", "टाइम", "कितने बजे", "कब खुलता", "कब बंद", "खुलने का"],
+        "hinglish": ["khula", "khuli", "khula hai", "band", "band hai", "kab khulta", "kab band", "kitne baje", "time kya", "timing", "dukan khuli", "open ho", "kab tak khula", "subah kitne"]
+      },
+      "patterns": ["(?i)kitne?\\s+baje", "(?i)kab\\s+(khul|band)", "(?i)\\bopen\\b", "(?i)\\bclose", "(?i)timing"],
+      "emojis": ["🕐", "⏰", "🕗"]
+    },
+    {
+      "key": "kirana_location",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "Where is your shop?",
+        "hi": "दुकान कहाँ है?",
+        "hinglish": "Dukan kaha hai?"
+      },
+      "answer": {
+        "en": "📍 We're at: Main Market, near the bus stand. Reply for a live location pin.",
+        "hi": "📍 हमारी दुकान: मेन मार्केट, बस स्टैंड के पास। लाइव लोकेशन के लिए मैसेज करें।",
+        "hinglish": "📍 Hamari dukan: Main Market, bus stand ke paas. Live location chahiye to message karein."
+      },
+      "keywords": {
+        "english": ["address", "location", "where", "where is", "map", "direction", "reach"],
+        "hindi": ["पता", "कहाँ", "कहां", "लोकेशन", "रास्ता", "कैसे आएं", "दुकान कहाँ"],
+        "hinglish": ["address", "kaha", "kahan", "kaha hai", "location", "dukan kaha", "shop kaha", "kaise aaye", "raasta", "rasta", "map bhejo"]
+      },
+      "patterns": ["(?i)\\bkah[aā]n?\\b", "(?i)address", "(?i)location", "(?i)\\bwhere\\b", "(?i)kaise\\s+aa"],
+      "emojis": ["📍", "🗺️"]
+    },
+    {
+      "key": "kirana_delivery",
+      "category": "service",
+      "priority": 6,
+      "question": {
+        "en": "Do you do home delivery?",
+        "hi": "क्या होम डिलीवरी करते हैं?",
+        "hinglish": "Home delivery karte ho kya?"
+      },
+      "answer": {
+        "en": "Yes! 🛵 Free home delivery on orders above ₹200, within 3 km. Just send your list + address.",
+        "hi": "जी हाँ! 🛵 ₹200 से ऊपर के ऑर्डर पर 3 km तक फ्री होम डिलीवरी। बस अपनी लिस्ट और पता भेज दें।",
+        "hinglish": "Ji haan! 🛵 ₹200 se upar ke order pe 3 km tak free home delivery. Bas apni list aur address bhej do."
+      },
+      "keywords": {
+        "english": ["delivery", "home delivery", "deliver", "delivered", "send home", "doorstep"],
+        "hindi": ["डिलीवरी", "होम डिलीवरी", "घर पर", "घर तक", "घर पे", "पहुंचाओगे", "पहुँचा दोगे", "भिजवा दोगे"],
+        "hinglish": ["delivery", "home delivery", "ghar pe", "ghar par", "ghar tak", "ghar bhej", "ghar bhijwa", "deliver karte", "pahuchaoge", "pahucha doge", "bhej doge", "bhijwa do", "bhijwa dena", "bhijwa de"]
+      },
+      "patterns": ["(?i)home\\s*delivery", "(?i)ghar\\s*(pe|par|tak|bhej|bhijwa)", "(?i)deliver", "(?i)pah[uū]ch", "(?i)bhijwa"],
+      "emojis": ["🛵", "🏠", "🚚"]
+    },
+    {
+      "key": "kirana_availability",
+      "category": "inquiry",
+      "priority": 5,
+      "question": {
+        "en": "Is this item available?",
+        "hi": "क्या यह सामान मिलेगा?",
+        "hinglish": "Ye saaman hai kya?"
+      },
+      "answer": {
+        "en": "Tell me the item name — I'll check stock and confirm in a minute ✅",
+        "hi": "आइटम का नाम बता दीजिए — मैं स्टॉक चेक करके अभी बताता हूँ ✅",
+        "hinglish": "Item ka naam batao — main stock check karke abhi confirm karta hoon ✅"
+      },
+      "keywords": {
+        "english": ["available", "availability", "in stock", "stock", "do you have", "got"],
+        "hindi": ["है क्या", "मिलेगा", "मिलेगी", "स्टॉक", "उपलब्ध", "रखा है", "है आपके पास"],
+        "hinglish": ["hai kya", "milega", "milegi", "mil jayega", "available", "stock me", "stock hai", "rakha hai", "aapke paas", "hai aapke"]
+      },
+      "patterns": ["(?i)\\bhai\\s*kya\\b", "(?i)mil(ega|egi|\\s*jayega)", "(?i)\\bstock\\b", "(?i)do you have"],
+      "emojis": ["📦", "✅"]
+    },
+    {
+      "key": "kirana_order",
+      "category": "order",
+      "priority": 6,
+      "question": {
+        "en": "I want to place an order",
+        "hi": "मुझे ऑर्डर देना है",
+        "hinglish": "Mujhe order karna hai"
+      },
+      "answer": {
+        "en": "Great! 🛒 Just type your items like this: \"2 atta, 1 sugar, 1 dal\" — I'll total it up and confirm.",
+        "hi": "बढ़िया! 🛒 बस ऐसे लिख दें: \"2 आटा, 1 चीनी, 1 दाल\" — मैं टोटल करके बता दूँगा।",
+        "hinglish": "Badhiya! 🛒 Bas aise likho: \"2 atta, 1 cheeni, 1 dal\" — main total karke confirm kar deta hoon."
+      },
+      "keywords": {
+        "english": ["order", "want to order", "place order", "buy", "purchase", "need"],
+        "hindi": ["ऑर्डर", "ऑर्डर करना", "चाहिए", "मंगाना", "भेज दो", "लेना है", "खरीदना"],
+        "hinglish": ["order", "order karna", "order karna hai", "order dena", "chahiye", "manga do", "mangwana", "lena hai", "le lunga", "bhej do"]
+      },
+      "patterns": ["(?i)\\border\\b", "(?i)chahiye", "(?i)mang(a|wa)", "(?i)lena\\s+hai"],
+      "emojis": ["🛒", "📝"]
+    },
+    {
+      "key": "kirana_payment",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "How can I pay? UPI?",
+        "hi": "पेमेंट कैसे करें? UPI चलेगा?",
+        "hinglish": "Payment kaise kare? UPI chalega?"
+      },
+      "answer": {
+        "en": "We accept UPI (GPay / PhonePe / Paytm), cash on delivery, and cards 💳",
+        "hi": "हम UPI (GPay / PhonePe / Paytm), कैश ऑन डिलीवरी और कार्ड — सब लेते हैं 💳",
+        "hinglish": "Hum UPI (GPay / PhonePe / Paytm), cash on delivery aur card — sab lete hain 💳"
+      },
+      "keywords": {
+        "english": ["payment", "pay", "upi", "gpay", "google pay", "phonepe", "paytm", "online payment", "cash", "card", "cod"],
+        "hindi": ["पेमेंट", "भुगतान", "ऑनलाइन", "यूपीआई", "नकद", "कैश", "कार्ड"],
+        "hinglish": ["payment", "kaise pay", "upi", "gpay", "google pay", "phonepe", "phone pe", "paytm", "online payment", "cash", "card", "paise kaise", "online de"]
+      },
+      "patterns": ["(?i)\\bupi\\b", "(?i)online\\s*pay", "(?i)g\\s*pay", "(?i)phone\\s*pe", "(?i)paytm", "(?i)\\bcod\\b"],
+      "emojis": ["💳", "📲"]
+    },
+    {
+      "key": "kirana_udhaar",
+      "category": "info",
+      "priority": 7,
+      "question": {
+        "en": "Can I pay later / on credit?",
+        "hi": "क्या उधार मिलेगा?",
+        "hinglish": "Udhaar milega kya?"
+      },
+      "answer": {
+        "en": "For regular customers we keep a monthly khata 📒. Share your name & number to start one.",
+        "hi": "नियमित ग्राहकों के लिए हम महीने का खाता रखते हैं 📒। शुरू करने के लिए अपना नाम और नंबर भेजें।",
+        "hinglish": "Regular customers ke liye hum mahine ka khata rakhte hain 📒. Shuru karne ke liye apna naam aur number bhej do."
+      },
+      "keywords": {
+        "english": ["credit", "pay later", "monthly account", "khata", "udhaar"],
+        "hindi": ["उधार", "उधारी", "खाता", "महीने का", "बाद में दूंगा", "हिसाब", "खाते पे"],
+        "hinglish": ["udhaar", "udhar", "udhaari", "khata", "khaata", "mahine ka", "baad me", "baad me de", "hisaab", "khate pe", "credit"]
+      },
+      "patterns": ["(?i)udh[aā]?r", "(?i)\\bkha+ta\\b", "(?i)baad\\s*me", "(?i)pay\\s*later"],
+      "emojis": ["📒", "🧾"]
+    },
+    {
+      "key": "kirana_delivery_charge",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "Is delivery free? Minimum order?",
+        "hi": "डिलीवरी फ्री है? मिनिमम ऑर्डर कितना?",
+        "hinglish": "Delivery free hai? Minimum order kitna?"
+      },
+      "answer": {
+        "en": "🆓 Free delivery above ₹200 (within 3 km). Below that, ₹20 delivery charge.",
+        "hi": "🆓 ₹200 से ऊपर फ्री डिलीवरी (3 km तक)। उससे कम पर ₹20 चार्ज।",
+        "hinglish": "🆓 ₹200 se upar free delivery (3 km tak). Usse kam pe ₹20 charge."
+      },
+      "keywords": {
+        "english": ["delivery charge", "free delivery", "minimum order", "delivery free", "charges", "extra charge"],
+        "hindi": ["डिलीवरी चार्ज", "फ्री डिलीवरी", "मिनिमम ऑर्डर", "कितने के ऊपर", "चार्ज", "मुफ्त"],
+        "hinglish": ["delivery charge", "free delivery", "delivery free", "minimum order", "kitne ke upar", "charge lagega", "extra charge", "muft"]
+      },
+      "patterns": ["(?i)free\\s*delivery", "(?i)delivery\\s*(charge|free)", "(?i)minimum\\s*order", "(?i)kitne?\\s+ke?\\s+upar"],
+      "emojis": ["🆓"]
+    },
+    {
+      "key": "kirana_offers",
+      "category": "inquiry",
+      "priority": 3,
+      "question": {
+        "en": "Any offers or discount?",
+        "hi": "कोई ऑफर या छूट है?",
+        "hinglish": "Koi offer ya discount hai?"
+      },
+      "answer": {
+        "en": "🏷️ This week: 5% off on monthly grocery lists above ₹1000. Send your list to see the deal!",
+        "hi": "🏷️ इस हफ्ते: ₹1000 से ऊपर की महीने की लिस्ट पर 5% छूट। लिस्ट भेजें और देखें!",
+        "hinglish": "🏷️ Is hafte: ₹1000 se upar ki mahine ki list pe 5% chhut. List bhejo aur dekho!"
+      },
+      "keywords": {
+        "english": ["offer", "offers", "discount", "sale", "scheme", "deal", "cheap"],
+        "hindi": ["ऑफर", "छूट", "डिस्काउंट", "सेल", "स्कीम", "कम करो", "सस्ता"],
+        "hinglish": ["offer", "chhut", "chhoot", "discount", "sale", "scheme", "deal", "kuch kam", "kam karo", "sasta", "kam kar do"]
+      },
+      "patterns": ["(?i)discount", "(?i)\\boffer", "(?i)\\bsale\\b", "(?i)kam\\s*(karo|kar\\s*do)", "(?i)sasta"],
+      "emojis": ["🏷️", "🎉", "🔖"]
+    },
+    {
+      "key": "kirana_contact",
+      "category": "info",
+      "priority": 3,
+      "question": {
+        "en": "What's your contact number?",
+        "hi": "आपका नंबर क्या है?",
+        "hinglish": "Aapka number kya hai?"
+      },
+      "answer": {
+        "en": "📞 You can call/WhatsApp us on this same number anytime during shop hours.",
+        "hi": "📞 आप इसी नंबर पर दुकान के समय में कभी भी कॉल/WhatsApp कर सकते हैं।",
+        "hinglish": "📞 Aap isi number pe shop hours me kabhi bhi call/WhatsApp kar sakte ho."
+      },
+      "keywords": {
+        "english": ["contact", "number", "phone", "call", "mobile"],
+        "hindi": ["नंबर", "फोन", "संपर्क", "कॉल", "मोबाइल"],
+        "hinglish": ["number", "phone", "contact", "call", "baat karni", "number do", "mobile"]
+      },
+      "patterns": ["(?i)\\bnumber\\b", "(?i)\\bcall\\b", "(?i)contact", "(?i)phone"],
+      "emojis": ["📞", "☎️"]
+    },
+    {
+      "key": "kirana_greeting",
+      "category": "greeting",
+      "priority": 1,
+      "question": {
+        "en": "Hi / Hello",
+        "hi": "नमस्ते",
+        "hinglish": "Namaste / Hello"
+      },
+      "answer": {
+        "en": "Namaste! 🙏 Welcome to our store. How can I help — price, availability, or home delivery?",
+        "hi": "नमस्ते! 🙏 हमारी दुकान में आपका स्वागत है। बताइए — दाम, सामान, या होम डिलीवरी?",
+        "hinglish": "Namaste! 🙏 Hamari dukan me aapka swagat hai. Bataiye — rate, saaman, ya home delivery?"
+      },
+      "keywords": {
+        "english": ["hi", "hello", "hey", "good morning", "good evening"],
+        "hindi": ["नमस्ते", "नमस्कार", "राम राम", "प्रणाम", "जय श्री राम"],
+        "hinglish": ["namaste", "namaskar", "ram ram", "hello", "helo", "salaam", "salam", "pranam"]
+      },
+      "patterns": ["(?i)^\\s*(hi|hii|hello|helo|hey|namaste|namaskar|ram\\s*ram)\\b"],
+      "emojis": ["👋", "🙏"]
+    }
+  ]
+}

@@ -45,39 +45,74 @@ async def initialize_default_intents(
     db: AsyncSession,
     business: Business,
 ) -> int:
-    """Pre-populate BusinessIntent rows for all global intents.
+    """Pre-populate BusinessIntent rows, all enabled, ready to use.
 
-    Each intent is enabled by default with the global default_reply_template
-    (with business name substituted). The owner customizes from the dashboard.
+    Preference order:
+      1. Business-type Q&A pack (kirana/restaurant/salon, …) — concrete
+         question→answer cards in the owner's language. Seeded with the
+         English answer in reply_text and hi/hinglish in reply_translations,
+         so replies are multilingual out of the box.
+      2. Fallback: the 10 generic global intents (for types without a pack).
+
+    The owner reviews/edits these in the Q&A picker; nothing is required.
     """
-    engine = get_matching_engine()
-    intents = engine.library.list_all()
+    from app.services.intents import seed_entries
 
+    biz_type = (
+        business.business_type.value
+        if hasattr(business.business_type, "value")
+        else str(business.business_type)
+    )
+    primary_language = business.languages[0] if business.languages else None
+
+    pack_rows = seed_entries(biz_type, primary_language)
+    if pack_rows:
+        for entry in pack_rows:
+            db.add(
+                BusinessIntent(
+                    business_id=business.id,
+                    intent_key=entry["intent_key"],
+                    title=entry["title"],
+                    enabled=True,
+                    reply_text=entry["reply_text"],
+                    reply_translations=entry["reply_translations"],
+                    priority=entry["priority"],
+                    custom_keywords=[],
+                )
+            )
+        await db.flush()
+        logger.info(
+            "Seeded %d pack intents (%s) for business %s",
+            len(pack_rows),
+            biz_type,
+            business.id,
+        )
+        return len(pack_rows)
+
+    # ---- Fallback: generic global intents ----
+    engine = get_matching_engine()
     created = 0
-    for intent_def in intents:
-        reply = intent_def.default_reply_template
-        # Light placeholder substitution — owners can edit freely later
+    for intent_def in engine.library.list_all():
         reply = (
-            reply.replace("[Your Business]", business.name)
+            intent_def.default_reply_template.replace("[Your Business]", business.name)
             .replace("[Business Name]", business.name)
             .replace("{{business_name}}", business.name)
         )
-
-        bi = BusinessIntent(
-            business_id=business.id,
-            intent_key=intent_def.key,
-            enabled=True,
-            reply_text=reply,
-            priority=intent_def.priority,
-            custom_keywords=[],
+        db.add(
+            BusinessIntent(
+                business_id=business.id,
+                intent_key=intent_def.key,
+                title=intent_def.name,
+                enabled=True,
+                reply_text=reply,
+                priority=intent_def.priority,
+                custom_keywords=[],
+            )
         )
-        db.add(bi)
         created += 1
 
     await db.flush()
     logger.info(
-        "Initialized %d default intents for business %s",
-        created,
-        business.id,
+        "Initialized %d generic intents for business %s", created, business.id
     )
     return created
