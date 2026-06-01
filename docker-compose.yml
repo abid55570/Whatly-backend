@@ -50,7 +50,7 @@ services:
   # ============================================
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: wa_backend
     restart: unless-stopped
@@ -59,7 +59,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend:/app
+      - .:/app
     depends_on:
       postgres:
         condition: service_healthy
@@ -74,14 +74,14 @@ services:
   # ============================================
   worker:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: wa_worker
     restart: unless-stopped
     env_file:
       - .env
     volumes:
-      - ./backend:/app
+      - .:/app
     depends_on:
       - backend
       - redis
@@ -100,14 +100,14 @@ services:
   # ============================================
   beat:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: wa_beat
     restart: unless-stopped
     env_file:
       - .env
     volumes:
-      - ./backend:/app
+      - .:/app
     depends_on:
       - backend
       - redis
@@ -139,7 +139,7 @@ services:
   # ============================================
   flower:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     container_name: wa_flower
     restart: unless-stopped

@@ -93,7 +93,8 @@ redis-cli ping        # → PONG
 ## 3. Backend (FastAPI)
 
 ```bash
-cd backend
+# Run from the repo root — this repo IS the backend (app/, alembic/,
+# pyproject.toml are at the top level).
 
 # Create + activate a virtualenv
 python -m venv .venv
@@ -112,10 +113,9 @@ pip install -e ".[dev]"
 
 ### Environment
 
-The app reads `.env` from the **repo root** (one level up from `backend/`).
+The app reads `.env` from the repo root (where `pyproject.toml` lives).
 
 ```bash
-cd ..                 # back to repo root
 cp .env.example .env
 ```
 
@@ -147,8 +147,7 @@ what each one does. `APP_ENV=development` enables the no-WhatsApp signup bypass.
 ### Migrate the database
 
 ```bash
-cd backend
-alembic upgrade head        # creates all 21 tables
+alembic upgrade head        # creates all 21 tables (run from repo root)
 ```
 
 > If you skip this you'll get `relation "otp_codes" does not exist` on signup.
@@ -164,7 +163,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ### Run Celery (separate terminals — only for background jobs)
 
-Activate the same venv in each, from `backend/`:
+Activate the same venv in each, from the repo root:
 
 ```bash
 # Terminal 4 — worker
@@ -181,40 +180,27 @@ celery -A app.workers.celery_app beat --loglevel=info
 
 ### Create a superuser (optional)
 ```bash
-cd backend
 python scripts/create_superuser.py --phone "+919876543210" --name "Owner"
 ```
 
 ---
 
-## 4. Frontend (Next.js)
+## 4. Frontend (separate repo)
+
+The frontend lives in **`Whatly-frontend`**
+(https://github.com/abid55570/Whatly-frontend). Clone it alongside this repo
+and follow its README:
 
 ```bash
-cd frontend
+git clone https://github.com/abid55570/Whatly-frontend.git
+cd Whatly-frontend
 npm install
+cp .env.local.example .env.local      # sets BACKEND_INTERNAL_URL=http://localhost:8000
+npm run dev                            # → http://localhost:3000
 ```
 
-### Environment
-
-Create `frontend/.env.local`:
-
-```env
-# Empty = same-origin. Next proxies /api/* to the backend below.
-NEXT_PUBLIC_API_URL=
-# Where Next forwards /api/* — point at your local backend (NOT backend:8000)
-BACKEND_INTERNAL_URL=http://localhost:8000
-```
-
-> Why: `next.config.mjs` rewrites `/api/*` → `BACKEND_INTERNAL_URL`. Under
-> Docker that defaults to `http://backend:8000`; running natively there is no
-> `backend` host, so you must set it to `http://localhost:8000`.
-
-### Run
-
-```bash
-npm run dev
-```
-- Frontend: http://localhost:3000
+It proxies `/api/*` to the backend you started above, so make sure
+`BACKEND_INTERNAL_URL=http://localhost:8000` in its `.env.local`.
 
 ---
 
@@ -240,8 +226,7 @@ Then open http://localhost:3000 → **Start free** → use the dev signup bypass
 ## 6. Run the tests
 
 ```bash
-cd backend
-# Uses the whatsapp_saas_test DB you created in step 1
+# From the repo root. Uses the whatsapp_saas_test DB you created in step 1
 pytest
 ```
 
@@ -259,7 +244,7 @@ pytest
 
 | Symptom | Fix |
 |---|---|
-| `relation "otp_codes" does not exist` | Run `alembic upgrade head` in `backend/`. |
+| `relation "otp_codes" does not exist` | Run `alembic upgrade head` from the repo root. |
 | `connection refused` to 5432 | Postgres isn't running, or wrong host. Confirm `@localhost` in `.env`. |
 | `connection refused` to 6379 | Redis isn't running. `redis-cli ping` should return `PONG`. |
 | Frontend loads but login/data 500s | `BACKEND_INTERNAL_URL` not set to `http://localhost:8000` in `frontend/.env.local`. |

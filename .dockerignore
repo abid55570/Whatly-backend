@@ -26,3 +26,7 @@ node_modules
 .vscode
 *.log
 logs/
+# Repo-root context: keep docs + local secrets out of the image
+# (data/ is intentionally NOT ignored — the bot loads intents/packs from it)
+docs/
+credentials/

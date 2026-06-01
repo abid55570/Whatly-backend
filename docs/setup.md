@@ -37,7 +37,7 @@ META_WEBHOOK_VERIFY_TOKEN=local-dev-token
 docker compose up -d
 ```
 
-Brings up: postgres, redis, backend (FastAPI), worker (Celery), beat (cron), frontend (Next.js), adminer, flower.
+Brings up: postgres, redis, backend (FastAPI), worker (Celery), beat (cron), adminer, flower. (The frontend is a separate repo — `Whatly-frontend`.)
 
 Verify:
 ```bash
@@ -78,13 +78,16 @@ Then login: visit http://localhost:3000/signup → use that phone → dev simula
 
 After signup, superusers see `/admin` link in Settings.
 
-## 6. Install frontend deps (auto-runs in container)
+## 6. Frontend (separate repo)
 
-If running frontend outside Docker:
+The frontend lives in **`Whatly-frontend`** (https://github.com/abid55570/Whatly-frontend),
+not in this repo. To run it locally:
 ```bash
-cd frontend
+git clone https://github.com/abid55570/Whatly-frontend.git
+cd Whatly-frontend
 npm install
-npm run dev
+cp .env.local.example .env.local      # BACKEND_INTERNAL_URL=http://localhost:8000
+npm run dev                            # → http://localhost:3000
 ```
 
 ## 7. Run tests
@@ -93,22 +96,20 @@ npm run dev
 # Inside container (recommended)
 docker compose run --rm backend pytest
 
-# Or from host with localhost DB
-cd backend
+# Or from host with localhost DB (run from the repo root)
 DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/whatsapp_saas_test \
 SYNC_DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/whatsapp_saas_test \
 REDIS_URL=memory:// RATE_LIMIT_ENABLED=false \
 python -m pytest tests/ --cov=app
 ```
 
-Coverage report → `backend/htmlcov/index.html`.
+Coverage report → `htmlcov/index.html`.
 
 ## 8. Logs
 
 ```bash
 docker compose logs -f backend
 docker compose logs -f worker
-docker compose logs -f frontend
 ```
 
 ## 9. Reset / wipe

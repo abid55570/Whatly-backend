@@ -3,7 +3,7 @@
 WhatsApp Business automation for Indian SMBs (kirana, restaurant, salon, gym,
 coaching, clinic). This repo is the **backend + docs + infra**:
 
-- **FastAPI** API (`backend/`) — auth, businesses, intents/Q&A packs, inbox,
+- **FastAPI** API (`app/`) — auth, businesses, intents/Q&A packs, inbox,
   orders, billing, GST/invoicing, WhatsApp webhooks
 - **PostgreSQL** (data), **Redis** (queue/cache), **Celery** worker + beat
   (background jobs), **Flower** (job dashboard), **Adminer** (DB GUI)
@@ -131,14 +131,18 @@ Re-run `upgrade head` after every pull that ships a migration. If you ever see
 ## Repo layout
 
 ```
-backend/      FastAPI app, Celery workers, Alembic migrations, tests
-  app/        api/ · services/ · models/ · schemas/ · workers/ · core/
-  data/       intent_packs/ (business-type Q&A packs), intents/ (global)
-  scripts/    create_superuser, test_intent_packs, …
+app/          FastAPI app — api/ · services/ · models/ · schemas/ · workers/ · core/
+alembic/      database migrations (alembic.ini at root)
+data/         intent_packs/ (business-type Q&A packs) · intents/ (global)
+scripts/      create_superuser, test_intent_packs, …
+tests/        pytest suite
 docs/         setup, setup-no-docker, deployment, infra-services,
               dev-mode, share-testing, gst, business, revenue, …
+pyproject.toml · Dockerfile
 docker-compose.yml   postgres · redis · backend · worker · beat · adminer · flower
 ```
+> The Docker **service** is still named `backend` — commands like
+> `docker compose exec backend …` are unchanged; only the folder layout flattened.
 
 ## Deploy to production
 See **`docs/deployment.md`** (Caddy + auto-SSL) and **`docs/setup.md`** §10.
