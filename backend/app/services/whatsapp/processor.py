@@ -40,6 +40,9 @@ from app.utils.phone import normalize_phone
 
 logger = logging.getLogger(__name__)
 
+# Prefix for owner-added custom Q&A intents (not in any pack or the global lib)
+CUSTOM_QA_PREFIX = "custom_"
+
 
 # ======================================================================
 # Public entrypoint
@@ -105,7 +108,7 @@ async def process_inbound_message(
 
     # ---------- Match ----------
     enabled_keys, custom_kw, custom_intents = await _load_intent_config(
-        db, business.id
+        db, business
     )
     engine = get_matching_engine()
     result = engine.match(
@@ -1023,16 +1026,21 @@ async def _get_or_create_conversation(
 
 
 async def _load_intent_config(
-    db: AsyncSession, business_id: UUID
+    db: AsyncSession, business: Business
 ) -> tuple[list[str], dict[str, list[str]], dict[str, IntentDefinition]]:
     """Return (enabled_keys, custom_kw_per_intent, synthetic_intents).
 
-    Synthetic intents are built from sheet-derived BusinessIntent rows
-    (intent_key starting with sheet_faq_). These don't exist in the
-    global intent library, so we construct IntentDefinitions for them.
+    Synthetic intents (passed to the engine as custom_intents) cover keys that
+    are NOT in the global library:
+      - Business-type Q&A pack keys (kirana_*, restaurant_*, salon_*) →
+        IntentDefinition built from the pack (keywords/patterns/emojis).
+      - Sheet FAQs (sheet_faq_*) and owner-added custom Q&As (custom_*) →
+        IntentDefinition built from the row's stored keywords.
     """
+    from app.services.intents import pack_intent_definitions
+
     stmt = select(BusinessIntent).where(
-        BusinessIntent.business_id == business_id,
+        BusinessIntent.business_id == business.id,
         BusinessIntent.enabled.is_(True),
     )
     rows = (await db.execute(stmt)).scalars().all()
@@ -1041,17 +1049,30 @@ async def _load_intent_config(
     custom_kw: dict[str, list[str]] = {
         r.intent_key: list(r.custom_keywords) for r in rows
     }
+
+    biz_type = (
+        business.business_type.value
+        if hasattr(business.business_type, "value")
+        else str(business.business_type)
+    )
+    pack_defs = pack_intent_definitions(biz_type)
+
     synthetic: dict[str, IntentDefinition] = {}
     for r in rows:
-        if r.intent_key.startswith(SHEET_FAQ_PREFIX) and r.custom_keywords:
-            synthetic[r.intent_key] = IntentDefinition(
-                key=r.intent_key,
-                name="Sheet FAQ",
-                description="Custom FAQ from Google Sheet",
+        key = r.intent_key
+        if key in pack_defs:
+            synthetic[key] = pack_defs[key]
+        elif (
+            key.startswith(SHEET_FAQ_PREFIX) or key.startswith(CUSTOM_QA_PREFIX)
+        ) and r.custom_keywords:
+            synthetic[key] = IntentDefinition(
+                key=key,
+                name=r.title or "Custom Q&A",
+                description="",
                 default_reply_template=r.reply_text,
                 languages={"custom": list(r.custom_keywords)},
                 priority=r.priority,
-                category="sheet",
+                category="custom",
             )
 
     return enabled, custom_kw, synthetic
@@ -1160,10 +1181,16 @@ async def _try_dynamic_body(
     intent_key: str,
     detected_language: str | None,
 ) -> str | None:
-    """If intent is ask_menu / ask_services AND catalog data exists,
+    """If the intent is a menu / services question AND catalog data exists,
     return dynamic text built from Products / Services. None → use static.
+
+    Matches both the generic global intents (ask_menu / ask_services) and the
+    business-type pack keys (e.g. rest_menu, salon_services) via suffix.
     """
-    if intent_key == "ask_menu":
+    is_menu = intent_key == "ask_menu" or intent_key.endswith("_menu")
+    is_services = intent_key == "ask_services" or intent_key.endswith("_services")
+
+    if is_menu:
         from app.models import Product
         from app.services.menu import generate_menu_text
 
@@ -1179,7 +1206,7 @@ async def _try_dynamic_body(
             business.name, products, detected_language=detected_language
         ) or None
 
-    if intent_key == "ask_services":
+    if is_services:
         from app.models import Service
         from app.services.menu import generate_services_text
 

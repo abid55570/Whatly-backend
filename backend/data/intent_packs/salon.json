@@ -1,0 +1,249 @@
+{
+  "business_type": "salon",
+  "label": "Salon / Parlour",
+  "languages": ["en", "hi", "hinglish"],
+  "qa": [
+    {
+      "key": "salon_services",
+      "category": "inquiry",
+      "priority": 5,
+      "question": {
+        "en": "What services do you offer?",
+        "hi": "आप क्या क्या सर्विस देते हैं?",
+        "hinglish": "Aap kya kya service dete ho?"
+      },
+      "answer": {
+        "en": "💇 We offer: haircut, hair colour, facial, cleanup, threading, waxing, manicure/pedicure & bridal. Ask for any rate!",
+        "hi": "💇 हम देते हैं: हेयरकट, कलर, फेशियल, क्लीनअप, थ्रेडिंग, वैक्सिंग, मैनीक्योर/पेडीक्योर और ब्राइडल। किसी का भी रेट पूछें!",
+        "hinglish": "💇 Hum dete hain: haircut, hair colour, facial, cleanup, threading, waxing, manicure/pedicure aur bridal. Kisi ka bhi rate poochho!"
+      },
+      "keywords": {
+        "english": ["services", "service", "what do you do", "treatments", "what services"],
+        "hindi": ["सर्विस", "क्या क्या", "क्या होता है", "क्या क्या होता"],
+        "hinglish": ["service", "kya kya", "kya kya hota", "kya hota hai", "kya kya service", "kya services"]
+      },
+      "patterns": ["(?i)kya\\s*kya", "(?i)\\bservices?\\b", "(?i)(facial|haircut|hair\\s*cut|baal\\s*kat|waxing|threading|manicure|pedicure|cleanup|massage|spa)", "(?i)(फेशियल|हेयरकट|बाल\\s*कटिंग|वैक्सिंग|थ्रेडिंग|मैनीक्योर|पेडीक्योर|मसाज)"],
+      "emojis": ["💇", "💅", "💆"]
+    },
+    {
+      "key": "salon_price",
+      "category": "inquiry",
+      "priority": 7,
+      "question": {
+        "en": "How much for a haircut / facial?",
+        "hi": "हेयरकट / फेशियल कितने का है?",
+        "hinglish": "Haircut / facial kitne ka hai?"
+      },
+      "answer": {
+        "en": "Tell me which service (haircut, facial, etc.) — I'll share the exact rate 😊",
+        "hi": "बताइए कौन सी सर्विस (हेयरकट, फेशियल आदि) — मैं सही रेट बता देता हूँ 😊",
+        "hinglish": "Bataiye kaun si service (haircut, facial waghera) — main sahi rate bata deta hoon 😊"
+      },
+      "keywords": {
+        "english": ["price", "rate", "cost", "how much", "charges", "haircut price", "facial price"],
+        "hindi": ["कीमत", "दाम", "रेट", "कितना", "कितने का", "कितने की", "चार्ज"],
+        "hinglish": ["kitna", "kitne ka", "kitne ki", "rate", "daam", "kya rate", "rate kya", "price kya", "charge kitna", "kitne me"]
+      },
+      "patterns": ["(?i)kitne?\\s+(ka|ki|me|mein)\\b", "(?i)\\brate\\b", "(?i)how\\s+much", "(?i)charge.*kitna", "(?i)कितन", "(?i)दाम", "(?i)रेट", "(?i)कीमत", "(?i)चार्ज", "(?i)भाव"],
+      "emojis": ["💰", "₹"]
+    },
+    {
+      "key": "salon_booking",
+      "category": "booking",
+      "priority": 6,
+      "question": {
+        "en": "Can I book an appointment?",
+        "hi": "क्या अपॉइंटमेंट बुक कर सकते हैं?",
+        "hinglish": "Appointment book kar sakte hai?"
+      },
+      "answer": {
+        "en": "💁 Yes! Tell me the service, date & time you'd like — I'll book your slot and confirm.",
+        "hi": "💁 ज़रूर! कौन सी सर्विस, कौन सा दिन और समय — बता दीजिए, मैं स्लॉट बुक कर देता हूँ।",
+        "hinglish": "💁 Zaroor! Kaun si service, kaun sa din aur time — batao, main slot book kar deta hoon."
+      },
+      "keywords": {
+        "english": ["appointment", "book", "booking", "slot", "reserve", "book appointment", "today slot", "tomorrow"],
+        "hindi": ["अपॉइंटमेंट", "बुक", "बुकिंग", "स्लॉट", "टाइम चाहिए", "आज", "कल"],
+        "hinglish": ["appointment", "appointment book", "book karna", "booking", "slot", "slot khali", "slot chahiye", "time chahiye", "aaj slot", "kal ka", "number lagana"]
+      },
+      "patterns": ["(?i)appoint", "(?i)\\bslot\\b", "(?i)\\bbooking\\b", "(?i)book\\s*kar"],
+      "emojis": ["💁", "📅", "🗓️"]
+    },
+    {
+      "key": "salon_timing",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "What are your timings?",
+        "hi": "आपका समय क्या है?",
+        "hinglish": "Aapka timing kya hai?"
+      },
+      "answer": {
+        "en": "🕐 Open Tue–Sun, 10:00 AM to 8:00 PM. Mondays closed.",
+        "hi": "🕐 मंगल से रविवार, सुबह 10 बजे से रात 8 बजे तक। सोमवार बंद।",
+        "hinglish": "🕐 Mangal se Ravivar, subah 10 baje se raat 8 baje tak. Monday band."
+      },
+      "keywords": {
+        "english": ["open", "close", "closed", "timing", "time", "hours", "open today", "sunday open"],
+        "hindi": ["खुला", "बंद", "समय", "टाइम", "कितने बजे", "कब खुलता", "रविवार"],
+        "hinglish": ["khula", "khula hai", "band", "band hai", "kitne baje", "time kya", "timing", "open ho", "aaj khula", "sunday khula", "kab tak"]
+      },
+      "patterns": ["(?i)kitne?\\s+baje", "(?i)kab\\s+(khul|band|tak)", "(?i)\\bopen\\b", "(?i)\\bclose", "(?i)timing"],
+      "emojis": ["🕐", "⏰"]
+    },
+    {
+      "key": "salon_location",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "Where is your parlour?",
+        "hi": "आपका पार्लर कहाँ है?",
+        "hinglish": "Aapka parlour kaha hai?"
+      },
+      "answer": {
+        "en": "📍 Shop 5, Main Market (above the medical store). Reply for a live location pin.",
+        "hi": "📍 शॉप 5, मेन मार्केट (मेडिकल स्टोर के ऊपर)। लाइव लोकेशन के लिए मैसेज करें।",
+        "hinglish": "📍 Shop 5, Main Market (medical store ke upar). Live location ke liye message karo."
+      },
+      "keywords": {
+        "english": ["address", "location", "where", "map", "direction", "where is"],
+        "hindi": ["पता", "कहाँ", "कहां", "लोकेशन", "रास्ता", "पार्लर कहाँ"],
+        "hinglish": ["address", "kaha", "kahan", "kaha hai", "location", "parlour kaha", "kaise aaye", "raasta", "rasta"]
+      },
+      "patterns": ["(?i)\\bkah[aā]n?\\b", "(?i)address", "(?i)location", "(?i)\\bwhere\\b"],
+      "emojis": ["📍", "🗺️"]
+    },
+    {
+      "key": "salon_home_service",
+      "category": "service",
+      "priority": 6,
+      "question": {
+        "en": "Do you provide home service?",
+        "hi": "क्या घर पर सर्विस मिलती है?",
+        "hinglish": "Ghar pe service milti hai kya?"
+      },
+      "answer": {
+        "en": "🏠 Yes! Home service available for facial, waxing, bridal & more (₹100 visit charge). Share your area + service.",
+        "hi": "🏠 जी हाँ! फेशियल, वैक्सिंग, ब्राइडल आदि के लिए घर पर सर्विस उपलब्ध (₹100 विज़िट चार्ज)। अपना इलाका और सर्विस भेजें।",
+        "hinglish": "🏠 Ji haan! Facial, waxing, bridal waghera ke liye ghar pe service available (₹100 visit charge). Apna area aur service bhejo."
+      },
+      "keywords": {
+        "english": ["home service", "at home", "come home", "doorstep", "home visit"],
+        "hindi": ["घर पर", "घर पे", "घर आकर", "घर आओगे", "होम सर्विस"],
+        "hinglish": ["home service", "ghar pe", "ghar par", "ghar aakar", "ghar aaoge", "ghar aa sakte", "ghar pe service", "doorstep"]
+      },
+      "patterns": ["(?i)home\\s*service", "(?i)ghar\\s*(pe|par|aa)", "(?i)at\\s*home"],
+      "emojis": ["🏠", "💆"]
+    },
+    {
+      "key": "salon_bridal",
+      "category": "inquiry",
+      "priority": 5,
+      "question": {
+        "en": "Do you do bridal makeup / packages?",
+        "hi": "क्या ब्राइडल मेकअप / पैकेज है?",
+        "hinglish": "Bridal makeup / package hai kya?"
+      },
+      "answer": {
+        "en": "👰 Yes! Bridal packages start at ₹5,000 (makeup + hair + draping). Trials available. Share your date to book.",
+        "hi": "👰 जी हाँ! ब्राइडल पैकेज ₹5,000 से शुरू (मेकअप + हेयर + ड्रेपिंग)। ट्रायल भी। बुक करने के लिए तारीख भेजें।",
+        "hinglish": "👰 Ji haan! Bridal package ₹5,000 se shuru (makeup + hair + draping). Trial bhi. Book karne ke liye date bhejo."
+      },
+      "keywords": {
+        "english": ["bridal", "wedding", "makeup", "package", "party makeup", "engagement"],
+        "hindi": ["ब्राइडल", "दुल्हन", "शादी", "मेकअप", "पैकेज", "पार्टी मेकअप"],
+        "hinglish": ["bridal", "dulhan", "shaadi", "shadi", "makeup", "make up", "package", "party makeup", "engagement", "sagai"]
+      },
+      "patterns": ["(?i)bridal", "(?i)make\\s*up", "(?i)\\bpackage\\b", "(?i)shaa?di|dulhan"],
+      "emojis": ["👰", "💄", "✨"]
+    },
+    {
+      "key": "salon_ladies_gents",
+      "category": "info",
+      "priority": 4,
+      "question": {
+        "en": "Is it for ladies or gents?",
+        "hi": "क्या यह लेडीज़ के लिए है या जेंट्स?",
+        "hinglish": "Ye ladies ke liye hai ya gents?"
+      },
+      "answer": {
+        "en": "We have separate sections — ladies' parlour and a gents' salon. Both fully equipped 💇‍♀️💇‍♂️",
+        "hi": "हमारे यहाँ अलग सेक्शन हैं — लेडीज़ पार्लर और जेंट्स सैलून। दोनों पूरी तरह तैयार 💇‍♀️💇‍♂️",
+        "hinglish": "Hamare yaha alag section hain — ladies parlour aur gents salon. Dono fully ready 💇‍♀️💇‍♂️"
+      },
+      "keywords": {
+        "english": ["ladies", "gents", "women", "men", "male", "female", "unisex", "girls", "boys"],
+        "hindi": ["लेडीज़", "जेंट्स", "महिला", "पुरुष", "औरत", "मर्द", "लड़कियों"],
+        "hinglish": ["ladies", "gents", "ladies ke liye", "gents ke liye", "mahila", "purush", "male", "female", "unisex", "ladko", "ladkiyo"]
+      },
+      "patterns": ["(?i)ladies", "(?i)gents", "(?i)\\bwomen\\b|\\bmen\\b", "(?i)unisex"],
+      "emojis": ["💇‍♀️", "💇‍♂️"]
+    },
+    {
+      "key": "salon_walkin",
+      "category": "info",
+      "priority": 7,
+      "question": {
+        "en": "Can I come without appointment?",
+        "hi": "क्या बिना अपॉइंटमेंट आ सकते हैं?",
+        "hinglish": "Bina appointment aa sakte hai?"
+      },
+      "answer": {
+        "en": "Walk-ins welcome! 🙂 But on weekends an appointment avoids waiting. Want me to book a slot?",
+        "hi": "बिना अपॉइंटमेंट भी आ सकते हैं! 🙂 पर वीकेंड पर अपॉइंटमेंट से इंतज़ार नहीं करना पड़ेगा। स्लॉट बुक कर दूँ?",
+        "hinglish": "Bina appointment bhi aa sakte ho! 🙂 Par weekend pe appointment se wait nahi karna padega. Slot book kar doon?"
+      },
+      "keywords": {
+        "english": ["walk in", "walkin", "without appointment", "direct", "directly come", "no booking", "waiting"],
+        "hindi": ["बिना अपॉइंटमेंट", "सीधे आ", "वेटिंग", "इंतज़ार", "लाइन"],
+        "hinglish": ["bina appointment", "walk in", "seedhe aa", "direct aa", "directly", "waiting", "wait karna", "line"]
+      },
+      "patterns": ["(?i)walk\\s*in", "(?i)bina\\s*appoint", "(?i)without\\s*appoint", "(?i)seedhe?\\s*aa"],
+      "emojis": ["🙂", "🚶"]
+    },
+    {
+      "key": "salon_payment",
+      "category": "info",
+      "priority": 3,
+      "question": {
+        "en": "Can I pay by UPI?",
+        "hi": "UPI से पेमेंट कर सकते हैं?",
+        "hinglish": "UPI se payment kar sakte hai?"
+      },
+      "answer": {
+        "en": "💳 Yes — UPI (GPay/PhonePe/Paytm), cards, and cash all welcome.",
+        "hi": "💳 जी हाँ — UPI (GPay/PhonePe/Paytm), कार्ड और कैश — सब चलता है।",
+        "hinglish": "💳 Ji haan — UPI (GPay/PhonePe/Paytm), card aur cash — sab chalta hai."
+      },
+      "keywords": {
+        "english": ["payment", "pay", "upi", "gpay", "phonepe", "paytm", "card", "cash"],
+        "hindi": ["पेमेंट", "यूपीआई", "कार्ड", "नकद", "कैश"],
+        "hinglish": ["payment", "upi", "gpay", "phonepe", "phone pe", "paytm", "card", "cash", "kaise pay", "online payment"]
+      },
+      "patterns": ["(?i)\\bupi\\b", "(?i)phone\\s*pe", "(?i)paytm", "(?i)\\bcard\\b", "(?i)online\\s*pay"],
+      "emojis": ["💳", "📲"]
+    },
+    {
+      "key": "salon_greeting",
+      "category": "greeting",
+      "priority": 1,
+      "question": {
+        "en": "Hi / Hello",
+        "hi": "नमस्ते",
+        "hinglish": "Namaste / Hello"
+      },
+      "answer": {
+        "en": "Namaste! 🙏 Welcome. Would you like our services & rates, or to book an appointment?",
+        "hi": "नमस्ते! 🙏 स्वागत है। सर्विस और रेट जानने हैं, या अपॉइंटमेंट बुक करनी है?",
+        "hinglish": "Namaste! 🙏 Swagat hai. Service aur rate jaanne hain, ya appointment book karni hai?"
+      },
+      "keywords": {
+        "english": ["hi", "hello", "hey", "good morning", "good evening"],
+        "hindi": ["नमस्ते", "नमस्कार", "प्रणाम"],
+        "hinglish": ["namaste", "namaskar", "hello", "helo", "hii", "salaam", "salam"]
+      },
+      "patterns": ["(?i)^\\s*(hi|hii|hello|helo|hey|namaste|namaskar)\\b"],
+      "emojis": ["👋", "🙏"]
+    }
+  ]
+}

@@ -32,12 +32,23 @@ class BusinessIntentConfigure(BaseModel):
     """One intent entry in a bulk-configure request."""
 
     intent_key: str = Field(..., min_length=1, max_length=100)
+    title: str | None = Field(None, max_length=300)
     enabled: bool = True
     reply_text: str = Field(..., min_length=1, max_length=4000)
     reply_translations: dict[str, str] = Field(default_factory=dict)
     media_url: str | None = Field(None, max_length=1000)
     custom_keywords: list[str] = Field(default_factory=list, max_length=50)
     priority: int = 0
+
+
+class CustomQACreate(BaseModel):
+    """Owner adds their own Q&A that the packs don't cover."""
+
+    question: str = Field(..., min_length=1, max_length=300)
+    answer: str = Field(..., min_length=1, max_length=4000)
+    reply_translations: dict[str, str] = Field(default_factory=dict)
+    # Optional explicit triggers; if omitted we derive them from the question.
+    keywords: list[str] = Field(default_factory=list, max_length=50)
 
 
 class BusinessIntentsBulkRequest(BaseModel):
@@ -64,13 +75,15 @@ class BusinessIntentResponse(BaseModel):
 
     id: UUID
     intent_key: str
+    title: str | None = None
     enabled: bool
     reply_text: str
     reply_translations: dict[str, str] = Field(default_factory=dict)
     media_url: str | None = None
     custom_keywords: list[str]
     priority: int
-    # Joined from global library for the UI
+    # Joined from global library for the UI (pack/custom rows use `title`)
     name: str | None = None
     description: str | None = None
     category: str | None = None
+    is_custom: bool = False
