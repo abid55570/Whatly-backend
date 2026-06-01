@@ -1,29 +1,9 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { Mail, Phone, MapPin, Twitter, Instagram, Linkedin, Globe } from "lucide-react";
 import { TextHoverEffect, FooterBackgroundGradient } from "@/components/ui/hover-footer";
-
-const footerLinks = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "FAQ", href: "#faq" },
-      { label: "Start free trial", href: "/language?next=/signup" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About us", href: "#" },
-      { label: "Customer stories", href: "#testimonials" },
-      { label: "Careers", href: "#" },
-      { label: "Live chat", href: "#", pulse: true },
-    ],
-  },
-];
 
 const contactInfo = [
   { icon: <Mail size={18} className="text-[#25d366]" />, text: "hello@whatly.app", href: "mailto:hello@whatly.app" },
@@ -39,6 +19,27 @@ const socialLinks = [
 ];
 
 export default function HoverFooter() {
+  const t = useTranslations("home.footer");
+  const footerLinks = [
+    {
+      title: t("product"),
+      links: [
+        { label: t("links.features"), href: "#features" },
+        { label: t("links.pricing"), href: "#pricing" },
+        { label: t("links.faq"), href: "#faq" },
+        { label: t("links.startTrial"), href: "/language?next=/signup" },
+      ],
+    },
+    {
+      title: t("company"),
+      links: [
+        { label: t("links.about"), href: "#" },
+        { label: t("links.stories"), href: "#testimonials" },
+        { label: t("links.careers"), href: "#" },
+        { label: t("links.liveChat"), href: "#", pulse: true },
+      ],
+    },
+  ];
   return (
     <footer className="relative m-4 h-fit overflow-hidden rounded-3xl bg-[#06140e] text-slate-300 md:m-8">
       <div className="relative z-40 mx-auto max-w-7xl p-10 md:p-14">
@@ -50,8 +51,7 @@ export default function HoverFooter() {
               <span className="font-display-serif text-3xl text-white">Whatly</span>
             </div>
             <p className="text-sm leading-relaxed text-slate-400">
-              WhatsApp automation for ambitious Indian shops — auto-replies,
-              orders and bookings in six languages.
+              {t("tagline")}
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function HoverFooter() {
 
           {/* Contact */}
           <div>
-            <h4 className="mb-6 text-lg font-semibold text-white">Contact us</h4>
+            <h4 className="mb-6 text-lg font-semibold text-white">{t("contactUs")}</h4>
             <ul className="space-y-4">
               {contactInfo.map((item, i) => (
                 <li key={i} className="flex items-center space-x-3">
@@ -105,7 +105,7 @@ export default function HoverFooter() {
             ))}
           </div>
           <p className="text-center text-slate-500 md:text-left">
-            © {new Date().getFullYear()} Whatly. All rights reserved.
+            © {new Date().getFullYear()} Whatly. {t("rights")}
           </p>
         </div>
       </div>

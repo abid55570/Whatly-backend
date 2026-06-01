@@ -89,7 +89,7 @@ export default function SignupPage() {
         className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-white/55 p-6 shadow-[0_30px_90px_-28px_rgba(16,140,126,0.4)] backdrop-blur-2xl sm:p-8"
       >
         <div className="mb-7 text-center">
-          <div className="mb-5 flex justify-center">
+          <div className="mb-5 hidden justify-center sm:flex">
             <MouseFollowingEyes size={48} />
           </div>
           <h1 className="text-3xl italic text-slate-900" style={{ fontFamily: SERIF }}>
@@ -129,6 +129,7 @@ export default function SignupPage() {
             loading={mutation.isPending}
             fullWidth
             size="lg"
+            gradient
           >
             Continue
             <ArrowRight className="h-5 w-5" />

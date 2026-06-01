@@ -27,15 +27,21 @@ export const avatar = (seed: string) =>
     seed
   )}&size=240&radius=50&backgroundColor=b9f0d4,c8f5dd,a6e9c6,d9fbe8`;
 
+/** Real face-cropped Unsplash portrait (CORS `*`, so it works both as a plain
+ *  <img> and drawn into the WebGL chat canvas). `crop=faces` centres the face. */
+export const uPhoto = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&crop=faces&w=480&h=480&q=80`;
+
 export const SIGNUP_HREF = "/language?next=/signup";
 
-/** Nav items: `section` scrolls within the page, `href` routes to a page. */
-export const NAV_LINKS: { label: string; section?: string; href?: string }[] = [
-  { label: "Home", section: "hero" },
-  { label: "Features", section: "features" },
-  { label: "Pricing", section: "pricing" },
-  { label: "Blog", href: "/blog" },
-  { label: "FAQ", section: "faq" },
+/** Nav items: `section` scrolls within the page, `href` routes to a page.
+ *  `key` indexes the `home.nav` i18n namespace for the localized label. */
+export const NAV_LINKS: { key: string; label: string; section?: string; href?: string }[] = [
+  { key: "home", label: "Home", section: "hero" },
+  { key: "features", label: "Features", section: "features" },
+  { key: "pricing", label: "Pricing", section: "pricing" },
+  { key: "blog", label: "Blog", href: "/blog" },
+  { key: "faq", label: "FAQ", section: "faq" },
 ];
 
 /** Words cycled on the loading screen. */
@@ -182,7 +188,7 @@ export const TESTIMONIALS: Testimonial[] = [
     location: "Delhi",
     type: "Restaurant",
     initials: "RK",
-    image: avatar("Rajesh Kumar"),
+    image: uPhoto("1565144317118-0655428f4cb6"),
     rotation: -2,
     column: 0,
   },
@@ -194,7 +200,7 @@ export const TESTIMONIALS: Testimonial[] = [
     location: "Hyderabad",
     type: "Gym & fitness",
     initials: "KV",
-    image: avatar("Karan Verma"),
+    image: uPhoto("1623605931891-d5b95ee98459"),
     rotation: 2,
     column: 1,
   },
@@ -206,7 +212,7 @@ export const TESTIMONIALS: Testimonial[] = [
     location: "Mumbai",
     type: "Kirana store",
     initials: "SS",
-    image: avatar("Suresh Sharma"),
+    image: uPhoto("1607756196724-7bcf730ca638"),
     rotation: 3,
     column: 0,
   },
@@ -218,7 +224,7 @@ export const TESTIMONIALS: Testimonial[] = [
     location: "Pune",
     type: "Salon & spa",
     initials: "AS",
-    image: avatar("Anjali Sharma"),
+    image: uPhoto("1580489944761-15a19d654956"),
     rotation: -3,
     column: 1,
   },
@@ -230,7 +236,7 @@ export const TESTIMONIALS: Testimonial[] = [
     location: "Jaipur",
     type: "Boutique",
     initials: "RC",
-    image: avatar("Riya Choudhary"),
+    image: uPhoto("1679492430093-fce51613a570"),
     rotation: 2,
     column: 0,
   },
@@ -242,7 +248,7 @@ export const TESTIMONIALS: Testimonial[] = [
     location: "Kochi",
     type: "Clinic",
     initials: "DM",
-    image: avatar("Dr. Mehta"),
+    image: uPhoto("1673865641073-4479f93a7776"),
     rotation: -2,
     column: 1,
   },
@@ -282,7 +288,7 @@ export const SHOWCASE: Showcase[] = [
       "Never leaves a hungry customer on read",
     ],
     phoneName: "Tandoori House",
-    pfp: avatar("Tandoori House"),
+    pfp: uPhoto("1565144317118-0655428f4cb6"),
     chat: [
       { side: "out", text: "Aaj ka menu bhejo?" },
       { side: "in", bot: true, text: "🍽️ Butter Naan ₹40 · Paneer Tikka ₹220 · Dal Makhani ₹180. Order karein?" },
@@ -304,7 +310,7 @@ export const SHOWCASE: Showcase[] = [
       "Queues cash-on-delivery pickups",
     ],
     phoneName: "Sharma Kirana",
-    pfp: avatar("Sharma Kirana"),
+    pfp: uPhoto("1607756196724-7bcf730ca638"),
     chat: [
       { side: "out", text: "kitne ka hai atta?" },
       { side: "in", bot: true, text: "Atta 5kg ₹250, 1kg ₹55. ✅ In stock!" },
@@ -326,7 +332,7 @@ export const SHOWCASE: Showcase[] = [
       "Cuts no-shows without a phone call",
     ],
     phoneName: "Glow Salon",
-    pfp: avatar("Glow Salon"),
+    pfp: uPhoto("1580489944761-15a19d654956"),
     chat: [
       { side: "out", text: "Kal haircut ka slot hai?" },
       { side: "in", bot: true, text: "Kal khaali: 11 AM, 2 PM, 5 PM. Kaunsa karein?" },
@@ -346,7 +352,7 @@ export const SHOWCASE: Showcase[] = [
       "Flags urgent messages for staff",
     ],
     phoneName: "CityCare Clinic",
-    pfp: avatar("CityCare Clinic"),
+    pfp: uPhoto("1673865641073-4479f93a7776"),
     chat: [
       { side: "out", text: "Doctor aaj available hain?" },
       { side: "in", bot: true, text: "Aaj OPD 4–8 PM. Appointment book karein?" },
@@ -355,6 +361,32 @@ export const SHOWCASE: Showcase[] = [
     ],
   },
 ];
+
+/**
+ * Mobile-only "one conversation unfolds" story — a single clinic ↔ customer
+ * chat that plays out message-by-message as you scroll, with a big one-word
+ * caption per stage and a closing line. (Desktop uses SHOWCASE instead.)
+ */
+export const MOBILE_STORY: Showcase = {
+  key: "clinic-story",
+  emoji: "🩺",
+  title: "Clinics",
+  blurb: "",
+  points: [],
+  phoneName: "CityCare Clinic",
+  pfp: avatar("CityCare Clinic"),
+  chat: [
+    { side: "out", text: "Clinic aaj khulega? Dr. Mehta available?" },
+    { side: "in", bot: true, text: "Namaste! 🩺 Khula hai 10–7. Dr. Mehta ka 4:30 PM slot free hai." },
+    { side: "out", text: "Book kar do — Anjali, 28" },
+    { side: "in", bot: true, text: "✅ #C-204 confirmed · 4:30 PM aaj. Reminder set 🔔" },
+  ],
+};
+
+/** One-word stage captions shown below the phone as the story unfolds. */
+export const MOBILE_STAGES = ["Ask.", "Reply.", "Book.", "Confirmed."];
+/** Closing line shown after the conversation completes. */
+export const MOBILE_CLOSING = "WhatsApp that answers — for you, 24/7.";
 
 export const STATS = [
   { value: "6", label: "Languages supported" },

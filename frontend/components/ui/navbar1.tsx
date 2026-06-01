@@ -2,20 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS, SIGNUP_HREF } from "@/components/landing/content";
 import { scrollToSection } from "@/components/landing/scroll";
 import { LangSwitcher } from "@/components/LangSwitcher";
+import { CartoonButton } from "@/components/ui/cartoon-button";
 
 const SERIF = "'Instrument Serif', serif";
 
 export function Navbar1() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((v) => !v);
+  const t = useTranslations("home.nav");
+  const router = useRouter();
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] flex w-full justify-center px-4 py-5">
+    <>
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-[100] hidden w-full justify-center px-4 py-5 md:flex">
       <div className="pointer-events-auto relative z-10 flex w-full max-w-5xl items-center justify-between rounded-full bg-white/30 px-6 py-2.5 shadow-lg shadow-black/[0.05] ring-1 ring-white/40 backdrop-blur-xl backdrop-saturate-150">
         {/* Logo */}
         <button
@@ -51,9 +57,7 @@ export function Navbar1() {
                 <Link
                   href={link.href}
                   className="text-sm font-medium text-slate-700 transition-colors hover:text-slate-900"
-                >
-                  {link.label}
-                </Link>
+                >{t(link.key)}</Link>
               </motion.div>
             ) : (
               <motion.button
@@ -64,9 +68,7 @@ export function Navbar1() {
                 transition={{ duration: 0.3 }}
                 whileHover={{ scale: 1.05 }}
                 className="text-sm font-medium text-slate-700 transition-colors hover:text-slate-900"
-              >
-                {link.label}
-              </motion.button>
+              >{t(link.key)}</motion.button>
             )
           )}
         </nav>
@@ -79,14 +81,12 @@ export function Navbar1() {
           transition={{ duration: 0.3, delay: 0.2 }}
         >
           <LangSwitcher variant="compact" />
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Link
-              href={SIGNUP_HREF}
-              className="accent-gradient inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white"
-            >
-              Begin Journey
-            </Link>
-          </motion.div>
+          <CartoonButton
+            label={t("cta")}
+            color="bg-[#25d366]"
+            size="sm"
+            onClick={() => router.push(SIGNUP_HREF)}
+          />
         </motion.div>
 
         {/* Mobile Menu Button */}
@@ -135,9 +135,7 @@ export function Navbar1() {
                       href={link.href}
                       onClick={toggleMenu}
                       className="block text-left text-base font-medium text-slate-900"
-                    >
-                      {link.label}
-                    </Link>
+                    >{t(link.key)}</Link>
                   </motion.div>
                 ) : (
                   <motion.button
@@ -151,9 +149,7 @@ export function Navbar1() {
                     transition={{ delay: i * 0.1 + 0.1 }}
                     exit={{ opacity: 0, x: 20 }}
                     className="text-left text-base font-medium text-slate-900"
-                  >
-                    {link.label}
-                  </motion.button>
+                  >{t(link.key)}</motion.button>
                 )
               )}
 
@@ -174,18 +170,20 @@ export function Navbar1() {
                 exit={{ opacity: 0, y: 20 }}
                 className="pt-2"
               >
-                <Link
-                  href={SIGNUP_HREF}
-                  onClick={toggleMenu}
-                  className="accent-gradient inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-base font-semibold text-white"
-                >
-                  Begin Journey
-                </Link>
+                <CartoonButton
+                  label={t("cta")}
+                  color="bg-[#25d366]"
+                  onClick={() => {
+                    toggleMenu();
+                    router.push(SIGNUP_HREF);
+                  }}
+                />
               </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+    </>
   );
 }

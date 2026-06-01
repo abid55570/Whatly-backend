@@ -1,19 +1,43 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 import SpotlightBackground from "@/components/ui/spotlight-background";
-import { SHOWCASE, SIGNUP_HREF } from "./content";
+import { ShinyButton } from "@/components/ui/shiny-button";
+import { SIGNUP_HREF } from "./content";
+import { useHomeContent } from "./useHomeContent";
 
 // R3F Canvas must never be server-rendered (it crashes in SSR).
 const Phone3D = dynamic(() => import("./Phone3D"), { ssr: false });
 
 const SERIF = "'Instrument Serif', serif";
+
+/** Floating 3D WhatsApp icons — HERO ONLY. They drift at different speeds
+ *  (parallax) and fade out as the phone zooms in. `speed` = parallax factor. */
+const DESKTOP_ORBS: {
+  size: number;
+  left?: string;
+  right?: string;
+  top: string;
+  delay: string;
+  rot: number;
+  blur?: number;
+  opacity?: number;
+  speed: number;
+}[] = [
+  { size: 112, left: "5%", top: "20%", delay: "0s", rot: -14, speed: 1.4 },
+  { size: 78, right: "7%", top: "15%", delay: "1.1s", rot: 18, blur: 1, opacity: 0.9, speed: 1.0 },
+  { size: 92, right: "5%", top: "60%", delay: "2.2s", rot: -8, speed: 1.7 },
+  { size: 60, left: "9%", top: "66%", delay: "1.6s", rot: 22, blur: 1.5, opacity: 0.8, speed: 0.8 },
+  { size: 46, left: "24%", top: "12%", delay: "0.7s", rot: 8, blur: 2, opacity: 0.6, speed: 0.5 },
+  { size: 52, right: "22%", top: "76%", delay: "1.9s", rot: -18, blur: 2, opacity: 0.6, speed: 1.2 },
+];
 
 /**
  * Hero + use-case story driven by ONE real iPhone 17 (Three.js) that moves in
@@ -24,7 +48,12 @@ export default function PhoneJourney() {
   const rootRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+  const orbsRef = useRef<HTMLDivElement>(null);
+  const orbRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const progressRef = useRef(0);
+  const t = useTranslations("home");
+  const { showcase: SHOWCASE } = useHomeContent();
+  const router = useRouter();
   const N = SHOWCASE.length;
   const [step, setStep] = useState(0); // 0 = hero, 1..N = use-cases
 
@@ -49,6 +78,18 @@ export default function PhoneJourney() {
           heroRef.current.style.opacity = String(o);
           heroRef.current.style.visibility = o < 0.02 ? "hidden" : "visible";
         }
+        // Hero-only floating icons: parallax drift (each at its own speed) +
+        // fade out as the phone zooms big (p 0.01 → 0.06).
+        if (orbsRef.current) {
+          const o = Math.min(1, Math.max(0, 1 - (p - 0.01) / 0.05));
+          orbsRef.current.style.opacity = String(o);
+          orbsRef.current.style.visibility = o < 0.02 ? "hidden" : "visible";
+        }
+        orbRefs.current.forEach((el, i) => {
+          if (!el) return;
+          const sp = DESKTOP_ORBS[i]?.speed ?? 1;
+          el.style.transform = `translateY(${p * sp * 1600}px)`;
+        });
       },
     });
     return () => st.kill();
@@ -83,6 +124,35 @@ export default function PhoneJourney() {
         {/* Spotlight glow that follows the cursor */}
         <SpotlightBackground color="rgba(37,211,102,0.4)" idleSize={320} movingSize={240} />
 
+        {/* Floating 3D WhatsApp icons — hero only, parallax + fade on scroll.
+            Outer span = JS parallax (translateY); middle = CSS float; img = tilt. */}
+        <div ref={orbsRef} aria-hidden className="pointer-events-none absolute inset-0 z-10 hidden md:block">
+          {DESKTOP_ORBS.map((o, i) => (
+            <span
+              key={i}
+              ref={(el) => { orbRefs.current[i] = el; }}
+              className="absolute block will-change-transform"
+              style={{ left: o.left, right: o.right, top: o.top }}
+            >
+              <span className="animate-float-soft block" style={{ animationDelay: o.delay }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/whatsapp-3d.png"
+                  alt=""
+                  width={o.size}
+                  height={o.size}
+                  style={{
+                    height: o.size,
+                    width: o.size,
+                    opacity: o.opacity ?? 1,
+                    transform: `rotate(${o.rot}deg)`,
+                    filter: `drop-shadow(0 14px 26px rgba(37,211,102,0.4))${o.blur ? ` blur(${o.blur}px)` : ""}`,
+                  }}
+                />
+              </span>
+            </span>
+          ))}
+        </div>
 
         {/* Stage — the floating Navbar1 (in Landing) overlays the top */}
         <div id="hero" className="relative h-screen">
@@ -95,27 +165,27 @@ export default function PhoneJourney() {
             className="pointer-events-none absolute left-1/2 top-[10%] z-20 w-[92%] max-w-2xl -translate-x-1/2 text-center"
           >
             <span className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs uppercase tracking-[0.25em] text-slate-500">
-              For Indian SMBs
+              {t("hero.badge")}
             </span>
             <h1
               className="mb-6 text-5xl italic leading-[0.95] tracking-tight text-slate-900 md:text-6xl lg:text-7xl"
               style={{ fontFamily: SERIF }}
             >
-              Where <em className="not-italic text-emerald-500">replies</em> flow{" "}
-              <em className="not-italic text-slate-400">through the silence.</em>
+              {t.rich("hero.title", {
+                em: (c) => <em className="not-italic text-emerald-500">{c}</em>,
+                em2: (c) => <em className="not-italic text-slate-400">{c}</em>,
+              })}
             </h1>
             <p className="mx-auto mb-8 max-w-md text-base leading-relaxed text-slate-600">
-              WhatsApp automation for ambitious shop owners — auto-replies, orders
-              and pickups across six languages.
+              {t("hero.subtitle")}
             </p>
-            <Link
-              href={SIGNUP_HREF}
-              className="pointer-events-auto accent-gradient inline-block rounded-full px-7 py-3.5 text-sm font-semibold text-white shadow-soft-lg transition-transform duration-300 hover:scale-105"
-            >
-              Start 14-day free trial
-            </Link>
+            <div className="pointer-events-auto inline-block">
+              <ShinyButton onClick={() => router.push(SIGNUP_HREF)}>
+                {t("hero.cta")}
+              </ShinyButton>
+            </div>
             <div className="mt-10 text-xs uppercase tracking-[0.3em] text-slate-400">
-              Scroll to begin ↓
+              {t("hero.scroll")} ↓
             </div>
           </div>
 
@@ -140,7 +210,7 @@ export default function PhoneJourney() {
                 <div className="mb-3 flex items-center justify-center gap-3 md:mb-5 md:justify-start">
                   <span className="h-px w-10 bg-gradient-to-r from-[#25d366] to-transparent" />
                   <span className="text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-slate-400">
-                    Use case{" "}
+                    {t("useCaseEyebrow")}{" "}
                     <span className="text-[#1faa59]">{String(step).padStart(2, "0")}</span>
                     <span className="text-slate-300"> / {String(N).padStart(2, "0")}</span>
                   </span>

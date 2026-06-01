@@ -2,23 +2,26 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import SectionHeader from "./SectionHeader";
-import { FAQS } from "./content";
+import { useHomeContent } from "./useHomeContent";
 
 export default function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
+  const t = useTranslations("home.faq");
+  const { faqs } = useHomeContent();
 
   return (
     <section id="faq" className="bg-[#f5faf6] py-16 md:py-24">
       <div className="mx-auto max-w-[900px] px-6 md:px-10 lg:px-16">
         <SectionHeader
-          eyebrow="FAQ"
-          heading="Common *questions*"
-          subtext="Everything owners ask before they switch. Still unsure? Just message us."
+          eyebrow={t("eyebrow")}
+          heading={t("title")}
+          subtext={t("subtitle")}
         />
 
         <div className="mt-10 flex flex-col gap-3">
-          {FAQS.map((item, i) => {
+          {faqs.map((item, i) => {
             const isOpen = open === i;
             return (
               <motion.div

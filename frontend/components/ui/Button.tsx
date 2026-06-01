@@ -13,6 +13,8 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: Size;
   loading?: boolean;
   fullWidth?: boolean;
+  /** Animated rotating-gradient ring (brand green) with a white fill. */
+  gradient?: boolean;
 }
 
 const VARIANTS: Record<Variant, string> = {
@@ -36,6 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       size = "md",
       loading,
       fullWidth,
+      gradient = false,
       className,
       children,
       disabled,
@@ -47,8 +50,10 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       ref={ref}
       disabled={disabled || loading}
       className={cn(
-        "inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed select-none",
-        VARIANTS[variant],
+        "inline-flex items-center justify-center gap-2 font-semibold transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed select-none",
+        gradient
+          ? "gradient-ring rounded-full text-slate-900"
+          : cn("rounded-xl", VARIANTS[variant]),
         SIZES[size],
         fullWidth && "w-full",
         className,

@@ -1,23 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import SectionHeader from "./SectionHeader";
 import { scrollToSection } from "./scroll";
-import { STEPS } from "./content";
+import { useHomeContent } from "./useHomeContent";
 
 export default function HowItWorks() {
+  const t = useTranslations("home.how");
+  const { steps } = useHomeContent();
   return (
     <section id="how" className="bg-[#f5faf6] py-16 md:py-24">
       <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
         <SectionHeader
-          eyebrow="How it works"
-          heading="Live in *ten minutes*"
-          subtext="From signup to first auto-reply. No tech skills, no migration."
-          cta={{ label: "Start now", onClick: () => scrollToSection("pricing") }}
+          eyebrow={t("eyebrow")}
+          heading={t("title")}
+          subtext={t("subtitle")}
+          cta={{ label: t("cta"), onClick: () => scrollToSection("pricing") }}
         />
 
         <div className="mt-10 flex flex-col gap-4">
-          {STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <motion.div
               key={s.n}
               initial={{ opacity: 0, y: 24 }}

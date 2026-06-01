@@ -1,16 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GALLERY } from "./content";
+import { useTranslations } from "next-intl";
+import { useHomeContent } from "./useHomeContent";
 
-const CARDS = [
-  { ...GALLERY[0], span: "md:col-span-8" }, // Restaurants
-  { ...GALLERY[1], span: "md:col-span-4" }, // Gyms & studios
-  { ...GALLERY[3], span: "md:col-span-4" }, // Salons & spas
-  { ...GALLERY[2], span: "md:col-span-8" }, // Clinics
-  { ...GALLERY[4], span: "md:col-span-6" }, // Kirana stores
-  { ...GALLERY[5], span: "md:col-span-6" }, // Boutiques
-];
+const SPANS = ["md:col-span-8", "md:col-span-4", "md:col-span-4", "md:col-span-8", "md:col-span-6", "md:col-span-6"];
+// Display order interleaves the gallery (Restaurants, Gyms, Salons, Clinics, Kirana, Boutiques).
+const ORDER = [0, 1, 3, 2, 4, 5];
 
 const reveal = {
   initial: { opacity: 0, y: 30 },
@@ -20,6 +16,10 @@ const reveal = {
 };
 
 export default function BentoWorks() {
+  const t = useTranslations("home.bento");
+  const { gallery } = useHomeContent();
+  const cards = ORDER.map((idx, i) => ({ ...gallery[idx], span: SPANS[i] }));
+
   return (
     <section id="works" className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
@@ -28,24 +28,22 @@ export default function BentoWorks() {
           <div className="mb-4 flex items-center gap-3">
             <span className="h-px w-8 bg-slate-300" />
             <span className="text-xs uppercase tracking-[0.3em] text-slate-400">
-              Built for
+              {t("eyebrow")}
             </span>
           </div>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <h2 className="max-w-xl font-display-serif text-4xl leading-[1.05] text-slate-900 md:text-6xl">
-              Every kind of{" "}
-              <span className="italic text-emerald-600">shop</span>
+              {t.rich("title", { em: (c) => <span className="italic text-emerald-600">{c}</span> })}
             </h2>
             <p className="max-w-sm text-sm leading-relaxed text-slate-500 md:text-base">
-              From kirana counters to clinics — Whatly handles the chat so you can
-              run the shop.
+              {t("subtitle")}
             </p>
           </div>
         </motion.div>
 
         {/* Bento grid */}
         <div className="grid auto-rows-[240px] grid-cols-1 gap-5 md:auto-rows-[340px] md:grid-cols-12 md:gap-6">
-          {CARDS.map((card, i) => (
+          {cards.map((card, i) => (
             <motion.div
               key={card.title}
               {...reveal}
@@ -90,7 +88,7 @@ export default function BentoWorks() {
                     “{card.fact}”
                   </p>
                   <span className="text-xs font-medium text-[#1faa59]">
-                    Whatly replies in seconds — so you never miss one ↓
+                    {t("hoverCta")}
                   </span>
                 </div>
               </div>

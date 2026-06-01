@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Noto_Sans_Bengali, Noto_Sans_Devanagari } from "next/font/google";
+import { Inter, Noto_Naskh_Arabic, Noto_Sans_Bengali, Noto_Sans_Devanagari } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -17,6 +17,10 @@ const notoDevanagari = Noto_Sans_Devanagari({
 const notoBengali = Noto_Sans_Bengali({
   subsets: ["bengali"],
   variable: "--font-bengali",
+});
+const notoArabic = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com";
@@ -137,6 +141,7 @@ export default async function RootLayout({
         inter.variable,
         notoDevanagari.variable,
         notoBengali.variable,
+        notoArabic.variable,
       )}
     >
       <body className="font-sans">

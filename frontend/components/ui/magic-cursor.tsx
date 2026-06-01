@@ -93,41 +93,6 @@ const Component = React.forwardRef<HTMLDivElement, MouseSparklesProps>(
       [Icon, className],
     );
 
-    const createGlowPoint = React.useCallback(
-      (position: Point) => {
-        const glow = document.createElement("div");
-        glow.className = cn("mouse-sparkles-glow-point", className);
-        glow.style.left = `${position.x}px`;
-        glow.style.top = `${position.y}px`;
-
-        document.body.appendChild(glow);
-        setTimeout(() => {
-          if (glow.parentNode) document.body.removeChild(glow);
-        }, configRef.current.glowDuration);
-      },
-      [className],
-    );
-
-    const createGlow = React.useCallback(
-      (last: Point, current: Point) => {
-        const distance = calcDistance(last, current);
-        const quantity = Math.max(
-          Math.floor(distance / configRef.current.maximumGlowPointSpacing),
-          1,
-        );
-
-        const dx = (current.x - last.x) / quantity;
-        const dy = (current.y - last.y) / quantity;
-
-        Array.from({ length: quantity }).forEach((_, index) => {
-          const x = last.x + dx * index;
-          const y = last.y + dy * index;
-          createGlowPoint({ x, y });
-        });
-      },
-      [createGlowPoint],
-    );
-
     const handleOnMove = React.useCallback(
       (e: { clientX: number; clientY: number }) => {
         const mousePosition = { x: e.clientX, y: e.clientY };
@@ -153,10 +118,9 @@ const Component = React.forwardRef<HTMLDivElement, MouseSparklesProps>(
           lastRef.current.starPosition = mousePosition;
         }
 
-        createGlow(lastRef.current.mousePosition, mousePosition);
         lastRef.current.mousePosition = mousePosition;
       },
-      [createStar, createGlow],
+      [createStar],
     );
 
     React.useEffect(() => {

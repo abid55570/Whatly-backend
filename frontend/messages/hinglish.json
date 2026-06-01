@@ -186,15 +186,33 @@
         "badge": "11:42 PM",
         "headline": "Aaj raat 8 customer chhod ke chale gaye",
         "subhead": "Owner so raha hai. Phone bajta raha. Koi reply nahi.",
-        "chats": ["kya open ho?", "atta hai bhaiya?", "2 atta 1 dal milega?", "koi reply nahi… 😞"],
-        "stat_labels": ["Lost orders", "Missed msgs", "Replies"]
+        "chats": [
+          "kya open ho?",
+          "atta hai bhaiya?",
+          "2 atta 1 dal milega?",
+          "koi reply nahi… 😞"
+        ],
+        "stat_labels": [
+          "Lost orders",
+          "Missed msgs",
+          "Replies"
+        ]
       },
       "with": {
         "badge": "11:42 PM · auto",
         "headline": "Owner so raha hai. Bot dukaan chala raha hai.",
         "subhead": "Har msg ka jawab. Order subah ke liye ready.",
-        "chats": ["kya open ho?", "atta hai bhaiya?", "2 atta 1 dal milega?", "thanks! kal subah aata hu"],
-        "stat_labels": ["Recovered", "24×7 reply", "Reply time"]
+        "chats": [
+          "kya open ho?",
+          "atta hai bhaiya?",
+          "2 atta 1 dal milega?",
+          "thanks! kal subah aata hu"
+        ],
+        "stat_labels": [
+          "Recovered",
+          "24×7 reply",
+          "Reply time"
+        ]
       }
     },
     "salon": {
@@ -203,15 +221,33 @@
         "badge": "Sunday band",
         "headline": "Sunday: band. Booking? Woh bhi band.",
         "subhead": "8 dulhan ne msg kiya. Kisi ko jawab nahi. Kahin aur chali gayi.",
-        "chats": ["aaj haircut book karna hai", "facial slot khali?", "shaam ko wedding hai 😩", "kahin aur try karti hu"],
-        "stat_labels": ["Lost booking", "Dulhan gayi", "Confirm"]
+        "chats": [
+          "aaj haircut book karna hai",
+          "facial slot khali?",
+          "shaam ko wedding hai 😩",
+          "kahin aur try karti hu"
+        ],
+        "stat_labels": [
+          "Lost booking",
+          "Dulhan gayi",
+          "Confirm"
+        ]
       },
       "with": {
         "badge": "Sunday · auto-book",
         "headline": "Sunday chhutti, par booking aati rahi.",
         "subhead": "Bot sheet se slot book karta hai. Monday — calendar full.",
-        "chats": ["aaj haircut book karna hai", "facial slot khali?", "shaam ko wedding hai 😩", "✅ booked! 7 PM dekh lo"],
-        "stat_labels": ["Capture", "Booked", "Rivals ko gaye"]
+        "chats": [
+          "aaj haircut book karna hai",
+          "facial slot khali?",
+          "shaam ko wedding hai 😩",
+          "✅ booked! 7 PM dekh lo"
+        ],
+        "stat_labels": [
+          "Capture",
+          "Booked",
+          "Rivals ko gaye"
+        ]
       }
     },
     "restaurant": {
@@ -220,15 +256,33 @@
         "badge": "Lunch rush",
         "headline": "Kitchen + phone + delivery — kuch toh chhutega",
         "subhead": "Owner khana bana raha. WhatsApp bharta ja raha. Order Swiggy pe.",
-        "chats": ["menu bhejo bhaiya", "delivery 1 hr me?", "kahan ho?", "🤷 chalo Swiggy se"],
-        "stat_labels": ["Swiggy cut", "Direct order gaye", "Reply lag"]
+        "chats": [
+          "menu bhejo bhaiya",
+          "delivery 1 hr me?",
+          "kahan ho?",
+          "🤷 chalo Swiggy se"
+        ],
+        "stat_labels": [
+          "Swiggy cut",
+          "Direct order gaye",
+          "Reply lag"
+        ]
       },
       "with": {
         "badge": "Lunch rush · auto",
         "headline": "Khana banao. Bot baki sab sambhalega.",
         "subhead": "Menu auto. UPI link auto. ETA auto-track.",
-        "chats": ["menu bhejo bhaiya", "2 paneer butter, 4 roti", "paid ✓", "✅ ETA 30 min"],
-        "stat_labels": ["Aggregator cut", "Direct + paid", "Reply"]
+        "chats": [
+          "menu bhejo bhaiya",
+          "2 paneer butter, 4 roti",
+          "paid ✓",
+          "✅ ETA 30 min"
+        ],
+        "stat_labels": [
+          "Aggregator cut",
+          "Direct + paid",
+          "Reply"
+        ]
       }
     }
   },
@@ -383,5 +437,283 @@
     "auto_sync_hint": "Nayi rows apne aap sync karein",
     "sync_every": "Har kitne mein",
     "connect_cta": "Sheet Connect karein"
+  },
+  "home": {
+    "nav": {
+      "home": "Home",
+      "features": "Features",
+      "pricing": "Pricing",
+      "blog": "Blog",
+      "faq": "FAQ",
+      "cta": "Shuru Karein"
+    },
+    "hero": {
+      "badge": "Indian dukaandaaron ke liye",
+      "title": "Jahan <em>replies</em> khud <em2>khaamoshi mein chalte hain.</em2>",
+      "subtitle": "Ambitious shop owners ke liye WhatsApp automation — auto-reply, orders aur pickup, chhe languages mein.",
+      "cta": "14-din ka free trial shuru karein",
+      "scroll": "Shuru karne ke liye scroll karein"
+    },
+    "stages": {
+      "ask": "Poochho.",
+      "reply": "Reply.",
+      "book": "Book.",
+      "confirmed": "Confirmed."
+    },
+    "closing": "WhatsApp jo khud reply kare — aapke liye, 24/7.",
+    "bento": {
+      "eyebrow": "Inke liye bana",
+      "title": "Har tarah ki <em>dukaan</em>",
+      "subtitle": "Kirana counter se clinic tak — Whatly chat sambhalta hai taaki aap dukaan chalayein.",
+      "hoverCta": "Whatly seconds mein reply karta hai — koi customer miss nahi ↓",
+      "items": {
+        "restaurants": {
+          "fact": "Customer usi se order karte hain jo pehle reply de — dinner rush mein late reply matlab gayi hui table."
+        },
+        "gyms": {
+          "title": "Gyms & studios",
+          "fact": "Zyadatar membership enquiry thandi pad jaati hai agar ek ghante mein reply na mile."
+        },
+        "clinics": {
+          "fact": "Patient usi clinic ko book karte hain jo abhi reply de — baad mein call karne wale ko nahi."
+        },
+        "salons": {
+          "title": "Salons & spas",
+          "fact": "Peak hours mein missed booking message matlab khaali chair jo bhar nahi sakti."
+        },
+        "kirana": {
+          "title": "Kirana stores",
+          "fact": "Customer usi se dobara order karte hain jo stock aur price sabse fast confirm kare."
+        },
+        "boutiques": {
+          "fact": "Size poochhne wale customer pehli reply dene wali shop se khareedte hain."
+        }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "Dukaano ki pasand",
+      "title": "Owners kya <em>kehte</em> hain",
+      "subtitle": "Pure India ke kirana, cafe, salon aur clinic — Whatly se WhatsApp par zyada orders close karte hain.",
+      "items": [
+        {
+          "quote": "Pehle har order phone pe lena padta tha. Ab Whatly khud reply karta hai — main bas cooking pe focus karta hoon.",
+          "type": "Restaurant"
+        },
+        {
+          "quote": "Membership queries, class timings, renewals — all handled on WhatsApp before I even reach the floor.",
+          "type": "Gym & fitness"
+        },
+        {
+          "quote": "Hinglish orders bhi samajh leta hai. '2 atta 1 dal' type karo, total ready. Customers ko bahut pasand aaya.",
+          "type": "Kirana store"
+        },
+        {
+          "quote": "My evening rush meant 30 missed messages. Now every client gets slots instantly and I book them right in chat.",
+          "type": "Salon & spa"
+        },
+        {
+          "quote": "Customers ping for kurti sizes and prices all day. Whatly shares the catalogue and books trials — I just stitch.",
+          "type": "Boutique"
+        },
+        {
+          "quote": "Appointment reminders alone cut my no-shows by half. Hours and FAQs are answered 24/7. Worth every rupee.",
+          "type": "Clinic"
+        }
+      ]
+    },
+    "how": {
+      "eyebrow": "Kaise kaam karta hai",
+      "title": "*Das minute* mein live",
+      "subtitle": "Signup se pehli auto-reply tak. Na tech skills, na migration.",
+      "cta": "Abhi shuru karein",
+      "steps": [
+        {
+          "title": "Free signup karein",
+          "body": "Phone number → WhatsApp pe verify → 14-din trial. Koi card nahi."
+        },
+        {
+          "title": "WhatsApp Business connect karein",
+          "body": "Meta ke official Embedded Signup se ek tap. Aapka data aapka rehta hai."
+        },
+        {
+          "title": "Auto-replies chunein",
+          "body": "12 ready templates — price, timings, menu, location. Answers edit karo, done."
+        },
+        {
+          "title": "Customers ko turant jawab",
+          "body": "Bot 24/7 customer ki bhasha mein reply karta hai. Aap inbox dekhte rahein."
+        }
+      ]
+    },
+    "stats": {
+      "items": [
+        {
+          "value": "6",
+          "label": "Languages supported"
+        },
+        {
+          "value": "₹399",
+          "label": "Shuruaat / mahina"
+        },
+        {
+          "value": "10 min",
+          "label": "Live hone mein"
+        },
+        {
+          "value": "14-din",
+          "label": "Free trial"
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Aapki dukaan ke liye best plans",
+      "subtitle": "Pure India ki dukaano ka bharosa. Jo aapki selling mein fit ho wo chunein — kabhi bhi upgrade karein.",
+      "perYear": "saal",
+      "perMonth": "mahina",
+      "conversations": "{count} conversations / mahina",
+      "startTrial": "Free trial shuru karein",
+      "whatsIncluded": "Isme shaamil hai:",
+      "plans": {
+        "growth": {
+          "features": [
+            "Starter ka sab kuch",
+            "3,000 conversations/mo",
+            "Orders + Pickup flow",
+            "Bookings + Calendar",
+            "Razorpay payment links",
+            "Analytics"
+          ]
+        },
+        "pro": {
+          "features": [
+            "Growth ka sab kuch",
+            "6,000 conversations/mo",
+            "Broadcasts",
+            "API + Webhooks",
+            "Priority support"
+          ]
+        }
+      }
+    },
+    "faq": {
+      "title": "Common *sawaal*",
+      "subtitle": "Switch karne se pehle owners yahi poochhte hain. Phir bhi confusion? Bas message karein.",
+      "items": [
+        {
+          "q": "Kya mere customers ko pata chalega ki ye bot hai?",
+          "a": "Unhe unki bhasha mein turant, sahi jawab milte hain. Zyadatar samajhte hain ki aap fast type kar rahe ho. Full transparency chahiye to reply pe 🤖 laga sakte ho."
+        },
+        {
+          "q": "Kya mujhe special WhatsApp number chahiye?",
+          "a": "Haan — ek WhatsApp Business number (free, WhatsApp Business app se). Hum Meta ke official integration se connect karte hain."
+        },
+        {
+          "q": "Agar customer kuch aisa poochhe jo mere FAQs mein nahi hai?",
+          "a": "Wo message aapke inbox mein 'Needs reply' ke saath aata hai. Aap khud reply karein, ya smart fallback ke liye AI add-on (₹699/mo) on karein."
+        },
+        {
+          "q": "Exactly kaunsi languages?",
+          "a": "English, Hindi (Devanagari), Hinglish, Bengali, Urdu, Bhojpuri. Bot detect karta hai customer ne kya likha aur usi bhasha mein reply karta hai."
+        },
+        {
+          "q": "Naye items / FAQs kaise add karun?",
+          "a": "Dashboard mein directly edit karein, ya apni Google Sheet edit karein — bot har 15 min mein auto-sync karta hai. Zyadatar owners Sheet prefer karte hain."
+        },
+        {
+          "q": "Koi setup fee ya commitment hai?",
+          "a": "Koi setup fee nahi. Koi commitment nahi. 14-din free trial. Trial ke liye card zaroori nahi."
+        }
+      ]
+    },
+    "footer": {
+      "tagline": "Ambitious Indian dukaano ke liye WhatsApp automation — chhe languages mein auto-reply, orders aur bookings.",
+      "product": "Product",
+      "company": "Company",
+      "contactUs": "Contact karein",
+      "links": {
+        "startTrial": "Free trial shuru karein",
+        "about": "Hamare baare mein",
+        "stories": "Customer stories",
+        "careers": "Careers",
+        "liveChat": "Live chat"
+      },
+      "rights": "Sabhi adhikaar surakshit."
+    },
+    "showcase": {
+      "items": {
+        "restaurant": {
+          "blurb": "Aapke busy hours ka matlab missed orders nahi hona chahiye. Whatly menu bhejta hai, order leta hai, total karta hai aur pickup time lock karta hai — sab WhatsApp mein, jab aap cooking karte ho.",
+          "points": [
+            "Aaj ka menu & live prices auto-bheje",
+            "Chat mein orders lekar total kare",
+            "Pickup time + payment method confirm kare",
+            "Bhookhe customer ko kabhi ignore na kare"
+          ],
+          "chat": [
+            "Aaj ka menu bhejo?",
+            "🍽️ Butter Naan ₹40 · Paneer Tikka ₹220 · Dal Makhani ₹180. Order karein?",
+            "2 butter naan, 1 paneer tikka",
+            "📝 ₹300 · Ready in 25 min. Pay on pickup?",
+            "haan",
+            "✅ Order #R210 confirmed! See you at 7 PM."
+          ]
+        },
+        "kirana": {
+          "blurb": "Customers jaise bolte hain waise type karte hain. Whatly bikhri Hindi & Hinglish list padhta hai, stock check karta hai, basket total karta hai aur cash-on-delivery ke liye queue karta hai — na app, na forms.",
+          "points": [
+            "Hindi & Hinglish orders samjhe",
+            "Stock check kare aur live price bataye",
+            "Basket turant auto-total kare",
+            "Cash-on-delivery pickup queue kare"
+          ],
+          "chat": [
+            "kitne ka hai atta?",
+            "Atta 5kg ₹250, 1kg ₹55. ✅ In stock!",
+            "2 atta, 1 toor dal bhejo",
+            "📝 Order ₹680 · Pickup by 5 PM. Reply YES to confirm.",
+            "haan",
+            "✅ Order #1234 confirmed! 💵 Cash on pickup."
+          ]
+        },
+        "salon": {
+          "blurb": "Haircut ke beech phone uthana band karein. Whatly khaali slots dikhata hai, appointment book karta hai aur reminder bhejta hai — chair bhari rahe aur no-shows ghatein.",
+          "points": [
+            "Live khaali slots turant dikhaye",
+            "Chat mein book & reschedule kare",
+            "Auto visit reminders bheje",
+            "Bina phone kiye no-shows ghataye"
+          ],
+          "chat": [
+            "Kal haircut ka slot hai?",
+            "Kal khaali: 11 AM, 2 PM, 5 PM. Kaunsa karein?",
+            "2 PM theek hai",
+            "✅ Booked — Haircut, kal 2 PM. Reminder bhej denge 🔔"
+          ]
+        },
+        "clinic": {
+          "blurb": "Patients har time wahi cheezein poochhte hain. Whatly timings aur FAQs turant batata hai, OPD slots book karta hai aur urgent cases flag karta hai — aapka front desk relax.",
+          "points": [
+            "Hours & FAQs 24/7 answer kare",
+            "OPD appointments book & confirm kare",
+            "Visit & follow-up reminders bheje",
+            "Urgent messages staff ke liye flag kare"
+          ],
+          "chat": [
+            "Doctor aaj available hain?",
+            "Aaj OPD 4–8 PM. Appointment book karein?",
+            "haan, 6 baje",
+            "✅ Token #18 · 6:00 PM. SMS bhej diya 📩"
+          ]
+        }
+      }
+    },
+    "mobileStory": {
+      "chat": [
+        "Clinic aaj khulega? Dr. Mehta available?",
+        "Namaste! 🩺 Khula hai 10–7. Dr. Mehta ka 4:30 PM slot free hai.",
+        "Book kar do — Anjali, 28",
+        "✅ #C-204 confirmed · 4:30 PM aaj. Reminder set 🔔"
+      ]
+    }
   }
 }

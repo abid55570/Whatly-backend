@@ -81,7 +81,12 @@ function wrap(ctx: CanvasRenderingContext2D, text: string, maxW: number) {
 
 const TIMES = ["10:18", "10:19", "10:20", "10:21", "10:22", "10:23", "10:24", "10:25"];
 
-function drawChat(ctx: CanvasRenderingContext2D, uc: Showcase, pfp: HTMLImageElement | null) {
+function drawChat(
+  ctx: CanvasRenderingContext2D,
+  uc: Showcase,
+  pfp: HTMLImageElement | null,
+  revealCount?: number,
+) {
   ctx.clearRect(0, 0, CW, CH);
   // WhatsApp wallpaper
   ctx.fillStyle = "#E5DDD5";
@@ -214,7 +219,16 @@ function drawChat(ctx: CanvasRenderingContext2D, uc: Showcase, pfp: HTMLImageEle
   const metaH = 30;
   const gap = 20;
 
-  const items = uc.chat.map((m) => {
+  // Progressive reveal: when revealCount is given, only the first N messages
+  // show (the conversation "plays out" as you scroll). A fractional value lets
+  // the newest bubble fade + slide up into place. Desktop omits it (all shown).
+  const rc = typeof revealCount === "number" ? revealCount : uc.chat.length;
+  const frac = rc - Math.floor(rc);
+  const isFading = frac > 0.001;
+  const shown = isFading ? Math.floor(rc) + 1 : Math.floor(rc);
+  const msgs = uc.chat.slice(0, Math.max(0, shown));
+
+  const items = msgs.map((m) => {
     ctx.font = `${fs}px Inter, Arial, sans-serif`;
     const lines = wrap(ctx, m.text, maxW - bpx * 2);
     const botH = m.bot ? 38 : 0;
@@ -224,11 +238,21 @@ function drawChat(ctx: CanvasRenderingContext2D, uc: Showcase, pfp: HTMLImageEle
     return { m, lines, botH, bw, bh };
   });
 
+  if (items.length === 0) return;
+
   const totalH = items.reduce((s, it) => s + it.bh + gap, 0) - gap;
   const chipH = 46;
   const areaTop = headH + 28;
   const areaBottom = inputY - 22;
-  let y = Math.max(areaTop + chipH + 26, areaBottom - totalH);
+  // Progressive reveal (mobile): the conversation starts at the TOP and grows
+  // downward; once it overflows, it anchors to the bottom so the newest bubble
+  // stays visible. Desktop (no revealCount) keeps the original bottom-fill.
+  // Mobile gets extra top padding so the TODAY chip clears the header.
+  const progressive = typeof revealCount === "number";
+  const topPad = progressive ? 82 : 26;
+  const topY = areaTop + chipH + topPad;
+  const bottomY = areaBottom - totalH;
+  let y = progressive ? Math.min(topY, bottomY) : Math.max(topY, bottomY);
 
   // date chip, sitting just above the first message
   const chipText = "TODAY";
@@ -249,6 +273,16 @@ function drawChat(ctx: CanvasRenderingContext2D, uc: Showcase, pfp: HTMLImageEle
   items.forEach((it, idx) => {
     const out = it.m.side === "out";
     const x = out ? CW - pad - it.bw : pad;
+
+    // Newest bubble fades + slides up into place as you scroll into it.
+    // Ease-out so it glides into place instead of tracking scroll linearly.
+    const fadingNow = isFading && idx === items.length - 1;
+    ctx.save();
+    if (fadingNow) {
+      const e = 1 - Math.pow(1 - frac, 2.4);
+      ctx.globalAlpha = e;
+      ctx.translate(0, (1 - e) * 30);
+    }
 
     // bubble
     roundRect(ctx, x, y, it.bw, it.bh, 22);
@@ -302,11 +336,22 @@ function drawChat(ctx: CanvasRenderingContext2D, uc: Showcase, pfp: HTMLImageEle
     }
     ctx.textAlign = "left";
 
+    ctx.restore();
     y += it.bh + gap;
   });
 }
 
-function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc: Showcase }) {
+function Model({
+  progressRef,
+  uc,
+  mobileMode = false,
+  revealRef,
+}: {
+  progressRef: MutableRefObject<number>;
+  uc: Showcase;
+  mobileMode?: boolean;
+  revealRef?: MutableRefObject<number>;
+}) {
   const { scene } = useGLTF(MODEL);
   const outer = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Group>(null);
@@ -318,12 +363,38 @@ function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc:
   const dampRef = useRef({ x: 0, y: 0, s: 1, init: false });
   // Cache of loaded chat-header avatars, keyed by url.
   const pfpCache = useRef(new Map<string, HTMLImageElement>());
+  // Last reveal value actually painted — gates redraws to real content changes
+  // (the chat repaints imperatively from useFrame, never via React re-render).
+  const lastDrawnRef = useRef(-999);
 
   const canvas = useMemo(() => {
     const c = document.createElement("canvas");
     c.width = CW;
     c.height = CH;
     return c;
+  }, []);
+
+  // Soft green radial glow drawn as a plane that lives BEHIND the phone in the
+  // 3D scene (mobile only) — so it tracks the device in 3D space and reads as
+  // light off the phone, not a fixed background blob.
+  const glowMesh = useRef<THREE.Mesh>(null);
+  const glowTexture = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 256;
+    const g = c.getContext("2d");
+    if (g) {
+      const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0, "rgba(92,242,162,1)");
+      grad.addColorStop(0.3, "rgba(64,226,138,0.92)");
+      grad.addColorStop(0.55, "rgba(46,216,112,0.62)");
+      grad.addColorStop(0.78, "rgba(37,211,102,0.28)");
+      grad.addColorStop(1, "rgba(37,211,102,0)");
+      g.fillStyle = grad;
+      g.fillRect(0, 0, 256, 256);
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
   }, []);
   const texture = useMemo(() => {
     const t = new THREE.CanvasTexture(canvas);
@@ -333,7 +404,13 @@ function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc:
     t.wrapS = THREE.RepeatWrapping;
     t.repeat.x = -1;
     t.offset.x = 1;
-    t.anisotropy = 8;
+    // Perf: skip the mipmap chain — it's regenerated on every redraw otherwise,
+    // which is the dominant cost when the chat repaints during scroll. The
+    // screen is viewed near-flat/front-on, so linear filtering is plenty.
+    t.generateMipmaps = false;
+    t.minFilter = THREE.LinearFilter;
+    t.magFilter = THREE.LinearFilter;
+    t.anisotropy = 4;
     return t;
   }, [canvas]);
 
@@ -345,16 +422,18 @@ function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc:
     if (ctx) {
       // Draw immediately (with the avatar if it's already cached), then load it
       // in the background and repaint once when it arrives.
+      const rc0 = revealRef?.current;
       const cached = pfpCache.current.get(uc.pfp) ?? null;
-      drawChat(ctx, uc, cached);
+      drawChat(ctx, uc, cached, rc0);
       texture.needsUpdate = true;
+      lastDrawnRef.current = typeof rc0 === "number" ? rc0 : -999;
       if (!cached && uc.pfp) {
         const img = new Image();
         img.crossOrigin = "anonymous";
         img.onload = () => {
           if (cancelled) return;
           pfpCache.current.set(uc.pfp, img);
-          drawChat(ctx, uc, img);
+          drawChat(ctx, uc, img, revealRef?.current);
           texture.needsUpdate = true;
         };
         img.src = uc.pfp;
@@ -387,12 +466,27 @@ function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc:
     return () => {
       cancelled = true;
     };
-  }, [scene, texture, uc, canvas]);
+  }, [scene, texture, uc, canvas, revealRef]);
 
   useFrame((_, delta) => {
     const o = outer.current;
     const inn = inner.current;
     if (!o || !inn) return;
+
+    // Repaint the chat imperatively (no React re-render) only when the reveal
+    // actually advances. Quantised to 0.05 so a continuous scroll triggers at
+    // most ~20 cheap redraws across the whole conversation.
+    if (revealRef) {
+      const q = Math.round(revealRef.current * 20) / 20;
+      if (q !== lastDrawnRef.current) {
+        lastDrawnRef.current = q;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          drawChat(ctx, uc, pfpCache.current.get(uc.pfp) ?? null, q);
+          texture.needsUpdate = true;
+        }
+      }
+    }
 
     // Measure + normalize, retrying each frame until the (meshopt) geometry is
     // actually decoded — so we never lock in a wrong/tiny scale or flash it.
@@ -416,18 +510,42 @@ function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc:
     inn.position.set(-centerRef.current.x * n, -centerRef.current.y * n, -centerRef.current.z * n);
 
     const p = progressRef.current ?? 0;
-    const t = sampleKF(p);
-    // Responsive: on phones, center the device (no side offset). During the hero
-    // it sits centred & peeks from the bottom; as the journey enters use-case
-    // mode (~p 0.05->0.1) it smoothly drops into the lower half + shrinks, so the
-    // taller use-case card has the top half to itself and never overlaps it.
-    const mobile = typeof window !== "undefined" && window.innerWidth < 768;
-    const ucFactor = THREE.MathUtils.clamp((p - 0.05) / 0.05, 0, 1);
-    const mobileYOff = -0.3 - 1.9 * ucFactor; // -0.3 (hero) -> -2.2 (use-cases, lower)
-    const mobileScale = 0.78 - 0.05 * ucFactor; // 0.78 (hero) -> 0.73 (use-cases, larger)
-    const targetX = mobile ? 0 : t.x;
-    const targetY = mobile ? t.y + mobileYOff : t.y;
-    const targetS = t.s * (mobile ? mobileScale : 1);
+
+    let targetX: number;
+    let targetY: number;
+    let targetS: number;
+    let rotY: number;
+    let rotX: number;
+
+    if (mobileMode) {
+      // New mobile flow: phone stays centered + big and faces the user. It
+      // rises once from the bottom as the hero fades, then holds while the chat
+      // plays out. No side-to-side, no spin — the conversation is the motion.
+      const rise = THREE.MathUtils.clamp(p / 0.12, 0, 1);
+      targetX = 0;
+      // Rises from peeking-at-bottom to a big, upper hero — but stays small
+      // enough that the top (dynamic island) is never cropped by the viewport,
+      // and leaves the lower strip for the stage caption below it.
+      targetY = THREE.MathUtils.lerp(-2.6, 0.5, rise);
+      targetS = THREE.MathUtils.lerp(0.85, 1.0, rise);
+      rotY = THREE.MathUtils.degToRad(-7) + BASE_ROT_Y; // slight tilt, screen facing
+      rotX = 0.04;
+    } else {
+      const t = sampleKF(p);
+      // Responsive: on phones, center the device (no side offset). During the hero
+      // it sits centred & peeks from the bottom; as the journey enters use-case
+      // mode (~p 0.05->0.1) it smoothly drops into the lower half + shrinks, so the
+      // taller use-case card has the top half to itself and never overlaps it.
+      const mobile = typeof window !== "undefined" && window.innerWidth < 768;
+      const ucFactor = THREE.MathUtils.clamp((p - 0.05) / 0.05, 0, 1);
+      const mobileYOff = -0.3 - 1.9 * ucFactor; // -0.3 (hero) -> -2.2 (use-cases, lower)
+      const mobileScale = 0.78 - 0.05 * ucFactor; // 0.78 (hero) -> 0.73 (use-cases, larger)
+      targetX = mobile ? 0 : t.x;
+      targetY = mobile ? t.y + mobileYOff : t.y;
+      targetS = t.s * (mobile ? mobileScale : 1);
+      rotY = THREE.MathUtils.degToRad(t.r) + BASE_ROT_Y;
+      rotX = BASE_ROT_X;
+    }
 
     // Seed the damped state on the first ready frame to avoid an opening swing.
     const d = dampRef.current;
@@ -444,28 +562,57 @@ function Model({ progressRef, uc }: { progressRef: MutableRefObject<number>; uc:
     d.s = THREE.MathUtils.damp(d.s, targetS, lambda, dt);
 
     // Rotation stays exact so the 360° spin reads crisp.
-    o.rotation.y = THREE.MathUtils.degToRad(t.r) + BASE_ROT_Y;
-    o.rotation.x = BASE_ROT_X;
+    o.rotation.y = rotY;
+    o.rotation.x = rotX;
     o.position.x = d.x;
     o.position.y = d.y;
     o.scale.setScalar(d.s);
+
+    // Glow plane: sits behind the phone, tracking its damped position + scale
+    // (mobile only). Faces the camera, fades in as the phone rises.
+    const gm = glowMesh.current;
+    if (mobileMode && gm) {
+      gm.position.set(d.x, d.y, -1.6);
+      gm.scale.set(d.s * 5.2, d.s * 7.2, 1);
+      const rise = THREE.MathUtils.clamp(p / 0.12, 0, 1);
+      (gm.material as THREE.MeshBasicMaterial).opacity = rise;
+      gm.visible = readyRef.current && rise > 0.01;
+    }
   });
 
   return (
-    <group ref={outer} visible={false}>
-      <group ref={inner}>
-        <primitive object={scene} />
+    <>
+      {mobileMode && (
+        <mesh ref={glowMesh} position={[0, 0, -1.6]} visible={false}>
+          <planeGeometry args={[1, 1]} />
+          <meshBasicMaterial
+            map={glowTexture}
+            transparent
+            opacity={0}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </mesh>
+      )}
+      <group ref={outer} visible={false}>
+        <group ref={inner}>
+          <primitive object={scene} />
+        </group>
       </group>
-    </group>
+    </>
   );
 }
 
 export default function Phone3D({
   progressRef,
   uc,
+  mobileMode = false,
+  revealRef,
 }: {
   progressRef: MutableRefObject<number>;
   uc: Showcase;
+  mobileMode?: boolean;
+  revealRef?: MutableRefObject<number>;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   // Stop rendering the WebGL scene whenever the journey is scrolled off-screen
@@ -482,7 +629,7 @@ export default function Phone3D({
   }, []);
 
   return (
-    <div ref={wrapRef} className="absolute inset-0 z-30">
+    <div ref={wrapRef} className="pointer-events-none absolute inset-0 z-30">
       <Canvas
         className="!absolute inset-0"
         style={{ pointerEvents: "none" }}
@@ -495,7 +642,7 @@ export default function Phone3D({
         <directionalLight position={[4, 6, 6]} intensity={1.4} />
         <directionalLight position={[-5, -2, -4]} intensity={0.5} />
         <Suspense fallback={null}>
-          <Model progressRef={progressRef} uc={uc} />
+          <Model progressRef={progressRef} uc={uc} mobileMode={mobileMode} revealRef={revealRef} />
           <Environment preset="city" />
         </Suspense>
       </Canvas>

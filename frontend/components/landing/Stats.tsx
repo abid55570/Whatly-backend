@@ -1,14 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { STATS } from "./content";
+import { useHomeContent } from "./useHomeContent";
 
 export default function Stats() {
+  const { stats } = useHomeContent();
   return (
     <section className="bg-[#f5faf6] py-16 md:py-24">
       <div className="mx-auto max-w-[1200px] px-6 md:px-10 lg:px-16">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 sm:gap-6">
-          {STATS.map((stat, i) => (
+          {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 30 }}

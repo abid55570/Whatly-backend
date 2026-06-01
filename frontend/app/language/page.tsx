@@ -20,6 +20,20 @@ import { useAuthStore } from "@/stores/auth";
 
 const SERIF = "'Instrument Serif', serif";
 
+/** Font stack: Latin → Inter, then native Noto fonts per script. */
+const NATIVE_FONT =
+  "var(--font-inter), var(--font-devanagari), var(--font-bengali), var(--font-arabic), system-ui, sans-serif";
+
+/** A clean script glyph per locale (no emoji) — each language's own letter. */
+const GLYPH: Record<Locale, string> = {
+  en: "A",
+  hi: "अ",
+  hinglish: "अA",
+  bn: "অ",
+  ur: "ا",
+  bho: "भ",
+};
+
 export default function LanguagePickerPage() {
   const router = useRouter();
   const params = useSearchParams();
@@ -87,7 +101,7 @@ export default function LanguagePickerPage() {
         className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-white/55 p-6 shadow-[0_30px_90px_-28px_rgba(16,140,126,0.4)] backdrop-blur-2xl sm:p-8"
       >
         <div className="mb-7 text-center">
-          <div className="mb-5 flex justify-center">
+          <div className="mb-5 hidden justify-center sm:flex">
             <MouseFollowingEyes size={48} />
           </div>
           <h1 className="text-3xl italic text-slate-900" style={{ fontFamily: SERIF }}>
@@ -115,14 +129,23 @@ export default function LanguagePickerPage() {
                     : "border-transparent bg-white/80 hover:-translate-y-0.5 hover:border-[#25d366]/40 hover:bg-white",
                 )}
               >
-                <span className="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-white text-lg shadow-sm ring-1 ring-slate-200/70">
-                  {meta.emoji}
+                <span
+                  className={cn(
+                    "flex h-9 w-9 flex-none items-center justify-center rounded-xl text-base font-semibold shadow-sm ring-1 transition-colors",
+                    active
+                      ? "bg-[#25d366] text-white ring-[#25d366]"
+                      : "bg-white text-slate-700 ring-slate-200/70",
+                  )}
+                  style={{ fontFamily: NATIVE_FONT }}
+                >
+                  {GLYPH[code]}
                 </span>
                 <span
                   className={cn(
-                    "flex-1 font-semibold",
+                    "flex-1 text-[1.05rem] font-semibold tracking-tight",
                     active ? "text-[#1faa59]" : "text-slate-900",
                   )}
+                  style={{ fontFamily: NATIVE_FONT }}
                 >
                   {meta.native}
                 </span>
@@ -139,7 +162,7 @@ export default function LanguagePickerPage() {
           })}
         </div>
 
-        <Button onClick={handleContinue} loading={pending} fullWidth size="lg">
+        <Button onClick={handleContinue} loading={pending} fullWidth size="lg" gradient>
           {t("continue")}
           <ArrowRight className="h-5 w-5" />
         </Button>

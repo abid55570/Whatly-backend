@@ -14,6 +14,11 @@ export default function SmoothScroll() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
+    // Always open at the very top — don't let the browser restore the previous
+    // scroll position on reload (it lands you mid-journey otherwise).
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+
     const lenis = new Lenis({
       duration: 1.15, // weight of the glide (higher = more float)
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo-out
@@ -26,6 +31,9 @@ export default function SmoothScroll() {
     // Expose so nav / CTA buttons can request smooth anchor scrolls.
     const w = window as unknown as { lenis?: Lenis };
     w.lenis = lenis;
+
+    // Snap Lenis itself to the top so it doesn't glide down from a restored pos.
+    lenis.scrollTo(0, { immediate: true });
 
     // Keep ScrollTrigger updated on every Lenis scroll frame.
     lenis.on("scroll", ScrollTrigger.update);

@@ -38,6 +38,21 @@ html.lenis body {
   will-change: transform;
 }
 
+/* Gently floating accent chips (mobile hero, facil-style). */
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0) rotate(4deg);
+  }
+}
+.animate-float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* Flowing green "aurora" — large blurred blobs drifting via GPU transforms. */
 .aurora-blob {
   position: absolute;
@@ -332,4 +347,65 @@ html.lenis body {
 }
 .animate-fade-rise-delay-2 {
   animation: fade-rise 0.8s ease-out 0.4s both;
+}
+
+/* Rotating conic-gradient (brand green) for gradient-ring buttons. */
+@property --r {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotating-gradient {
+  to {
+    --r: 360deg;
+  }
+}
+
+/* Standalone GradientButton (components/ui/button-1.tsx). */
+.rotatingGradient {
+  --color-background: #ffffff;
+  --color-text: #0f172a;
+  background: conic-gradient(from var(--r), #25d366, #34d97c, #128c7e, #34d97c, #25d366);
+  animation: rotating-gradient 4s linear infinite;
+}
+
+/* Rotating gradient ring for the shared <Button gradient> — a thick green ring
+   with a bright sweeping highlight + soft glow so the rotation is clearly
+   visible on white. The button's label/spinner sit on top. */
+.gradient-ring {
+  position: relative;
+  isolation: isolate;
+  background: conic-gradient(
+    from var(--r),
+    #0a6d3b 0%,
+    #25d366 18%,
+    #eafff4 32%,
+    #25d366 46%,
+    #0a6d3b 64%,
+    #0a6d3b 100%
+  );
+  animation: rotating-gradient 2.4s linear infinite;
+  box-shadow: 0 0 0 1px rgba(37, 211, 102, 0.2), 0 12px 32px -8px rgba(37, 211, 102, 0.5);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, filter 0.25s ease;
+}
+.gradient-ring::after {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  border-radius: inherit;
+  background: #ffffff;
+  z-index: -1;
+  transition: inset 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Hover: lift, brighten, intensify the glow, and thicken the ring. */
+.gradient-ring:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: saturate(1.15);
+  box-shadow: 0 0 0 1px rgba(37, 211, 102, 0.4), 0 20px 44px -10px rgba(37, 211, 102, 0.7);
+}
+.gradient-ring:hover:not(:disabled)::after {
+  inset: 7px;
+}
+.gradient-ring:active:not(:disabled) {
+  transform: translateY(0);
 }

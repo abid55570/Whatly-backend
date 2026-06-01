@@ -1,17 +1,20 @@
 "use client";
 
-import { ExternalLink, Loader2, MessageCircle, RefreshCw } from "lucide-react";
+import { ExternalLink, FlaskConical, Loader2, MessageCircle, RefreshCw } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
+import AuroraBackground from "@/components/ui/aurora-background";
+import { Component as MagicCursor } from "@/components/ui/magic-cursor";
 import { apiErrorMessage } from "@/lib/api";
-import {
-  useDevSimulateVerify,
-  useVerificationStatus,
-} from "@/lib/queries";
+import { useDevSimulateVerify, useVerificationStatus } from "@/lib/queries";
 import { useAuthStore } from "@/stores/auth";
+
+const SERIF = "'Instrument Serif', serif";
 
 export default function VerifyPage() {
   const router = useRouter();
@@ -47,7 +50,7 @@ export default function VerifyPage() {
     if (status.status === "verified" && status.access_token && status.user) {
       setAuth(status.access_token, status.user);
       sessionStorage.clear();
-      toast.success("Verified! 🎉");
+      toast.success("Verified!");
       router.replace("/onboarding/business");
     } else if (status.status === "expired") {
       toast.error("Code expired. Please try again.");
@@ -67,57 +70,97 @@ export default function VerifyPage() {
     }
   }
 
+  const expired = status?.status === "expired";
+  const waiting = !expired && (status?.status === "pending" || !status);
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-brand-50 to-white p-4 flex flex-col items-center justify-center">
-      <div className="w-full max-w-sm text-center animate-fade-in">
-        <div className="inline-flex w-20 h-20 rounded-3xl bg-brand-500 text-white text-4xl items-center justify-center mb-6 shadow-soft-lg animate-pulse">
-          📱
+    <main className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-white p-4">
+      {/* Flowing green aurora + sparkle cursor */}
+      <AuroraBackground />
+      <MagicCursor colors={["252 254 255", "37 211 102", "52 217 124"]} />
+
+      {/* Home / logo top-left */}
+      <Link
+        href="/"
+        aria-label="Back to home"
+        className="group absolute left-5 top-5 z-20 flex items-center gap-2.5"
+      >
+        <span
+          className="inline-block h-8 w-8 rounded-full transition-transform duration-300 group-hover:rotate-12"
+          style={{ background: "linear-gradient(135deg,#25d366,#128c7e)" }}
+        />
+        <span
+          className="text-2xl leading-none tracking-tight text-slate-900"
+          style={{ fontFamily: SERIF }}
+        >
+          Whatly
+        </span>
+      </Link>
+
+      {/* Glass card */}
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 w-full max-w-md rounded-3xl border border-white/50 bg-white/55 p-6 text-center shadow-[0_30px_90px_-28px_rgba(16,140,126,0.4)] backdrop-blur-2xl sm:p-8"
+      >
+        {/* WhatsApp icon badge with a "listening" pulse */}
+        <div className="mb-6 flex justify-center">
+          <span
+            className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl text-white shadow-[0_16px_36px_-12px_rgba(37,211,102,0.7)]"
+            style={{ background: "linear-gradient(135deg,#25d366,#128c7e)" }}
+          >
+            {waiting && (
+              <span
+                aria-hidden
+                className="absolute inset-0 rounded-2xl bg-[#25d366]/40 animate-ping"
+              />
+            )}
+            <MessageCircle className="relative h-7 w-7" strokeWidth={2} />
+          </span>
         </div>
 
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">
+        <h1 className="text-3xl italic text-slate-900" style={{ fontFamily: SERIF }}>
           Verify via WhatsApp
         </h1>
-        <p className="text-slate-600 mb-8 text-sm">
-          Tap the button below — WhatsApp will open with a pre-filled message.
-          <br />
-          Just hit send. We'll log you in automatically.
+        <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-slate-500">
+          Tap below — WhatsApp opens with a pre-filled message. Just hit send and
+          we&apos;ll log you in automatically.
         </p>
 
         <a
           href={deepLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl px-6 py-4 shadow-soft inline-flex w-full items-center justify-center gap-2 text-lg transition active:scale-[0.98]"
+          className="accent-gradient mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-white shadow-soft-lg transition-transform duration-200 active:scale-[0.98]"
         >
-          <MessageCircle className="h-5 w-5" />
-          Open WhatsApp & Verify
-          <ExternalLink className="h-4 w-4" />
+          <MessageCircle className="h-5 w-5" strokeWidth={2} />
+          Open WhatsApp &amp; Verify
+          <ExternalLink className="h-4 w-4" strokeWidth={2} />
         </a>
 
-        <div className="flex items-center justify-center gap-2 text-sm text-slate-500 mt-6">
-          {status?.status === "pending" || !status ? (
+        <div className="mt-5 flex items-center justify-center gap-2 text-sm text-slate-500">
+          {waiting ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Waiting for your WhatsApp message...</span>
+              <Loader2 className="h-4 w-4 animate-spin text-[#1faa59]" />
+              <span>Waiting for your WhatsApp message…</span>
             </>
-          ) : status.status === "expired" ? (
-            <span className="text-red-500">Verification expired</span>
+          ) : expired ? (
+            <span className="font-medium text-rose-500">Verification expired</span>
           ) : null}
         </div>
 
         {devCode && (
-          <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-xl text-left">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-bold text-amber-900 uppercase tracking-wide">
-                🛠️ Dev Mode
-              </span>
+          <div className="mt-6 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/80 p-4 text-left">
+            <div className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-amber-900">
+              <FlaskConical className="h-3.5 w-3.5" strokeWidth={2} />
+              Dev mode
             </div>
-            <p className="text-xs text-amber-900 mb-2">
-              Use this to simulate the WhatsApp round-trip without setting up
-              the platform's WA number.
+            <p className="mb-3 text-xs leading-relaxed text-amber-900/80">
+              Simulate the WhatsApp round-trip without the platform&apos;s WA number.
             </p>
             <div className="flex items-center gap-2">
-              <code className="text-sm font-mono bg-white px-2 py-1.5 rounded border border-amber-300 flex-1 text-center">
+              <code className="flex-1 rounded-lg border border-amber-300 bg-white px-2 py-1.5 text-center font-mono text-sm text-amber-900">
                 {devCode}
               </code>
               <Button
@@ -134,12 +177,12 @@ export default function VerifyPage() {
 
         <button
           onClick={() => router.replace("/signup")}
-          className="text-sm text-slate-500 hover:text-slate-700 mt-6 inline-flex items-center gap-1"
+          className="mx-auto mt-6 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-700"
         >
-          <RefreshCw className="h-3.5 w-3.5" />
+          <RefreshCw className="h-3.5 w-3.5" strokeWidth={2} />
           Wrong number? Start over
         </button>
-      </div>
+      </motion.div>
     </main>
   );
 }

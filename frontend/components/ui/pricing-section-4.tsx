@@ -7,11 +7,14 @@ import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
 import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
-import { PLANS, SIGNUP_HREF } from "@/components/landing/content";
+import { SIGNUP_HREF } from "@/components/landing/content";
+import { useHomeContent } from "@/components/landing/useHomeContent";
 
 const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
   const [selected, setSelected] = useState("0");
+  const t = useTranslations("home.pricing");
 
   const handleSwitch = (value: string) => {
     setSelected(value);
@@ -22,8 +25,8 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
     <div className="flex justify-center">
       <div className="relative z-10 mx-auto flex w-fit rounded-full border border-white/10 bg-neutral-900 p-1">
         {[
-          { v: "0", label: "Monthly" },
-          { v: "1", label: "Yearly" },
+          { v: "0", label: t("monthly") },
+          { v: "1", label: t("yearly") },
         ].map(({ v, label }) => (
           <button
             key={v}
@@ -44,7 +47,7 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
               {label}
               {v === "1" && (
                 <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold">
-                  2 mo free
+                  {t("saveBadge")}
                 </span>
               )}
             </span>
@@ -58,6 +61,8 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
 export default function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
   const pricingRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("home.pricing");
+  const { plans: PLANS } = useHomeContent();
 
   const revealVariants = {
     visible: (i: number) => ({
@@ -120,7 +125,7 @@ export default function PricingSection() {
             containerClassName="justify-center"
             transition={{ type: "spring", stiffness: 250, damping: 40, delay: 0 }}
           >
-            Plans that work best for your shop
+            {t("title")}
           </VerticalCutReveal>
         </h2>
 
@@ -131,8 +136,7 @@ export default function PricingSection() {
           customVariants={revealVariants}
           className="text-gray-300"
         >
-          Trusted by shops across India. Pick what fits how you sell — upgrade
-          anytime.
+          {t("subtitle")}
         </TimelineContent>
 
         <TimelineContent
@@ -174,7 +178,7 @@ export default function PricingSection() {
               >
                 {plan.recommended && (
                   <span className="absolute right-5 top-5 rounded-full bg-gradient-to-t from-[#1faa59] to-[#25d366] px-3 py-1 text-xs font-semibold text-white">
-                    Most popular
+                    {t("mostPopular")}
                   </span>
                 )}
                 <CardHeader className="text-left">
@@ -187,10 +191,10 @@ export default function PricingSection() {
                         className="text-4xl font-semibold"
                       />
                     </span>
-                    <span className="ml-1 text-gray-300">/{isYearly ? "year" : "month"}</span>
+                    <span className="ml-1 text-gray-300">/{isYearly ? t("perYear") : t("perMonth")}</span>
                   </div>
                   <p className="mb-4 text-sm text-gray-300">
-                    {plan.conv.toLocaleString("en-IN")} conversations / month
+                    {t("conversations", { count: plan.conv.toLocaleString("en-IN") })}
                   </p>
                 </CardHeader>
 
@@ -203,11 +207,11 @@ export default function PricingSection() {
                         : "border border-neutral-800 bg-gradient-to-t from-neutral-950 to-neutral-600 text-white shadow-lg shadow-neutral-900"
                     }`}
                   >
-                    Start free trial
+                    {t("startTrial")}
                   </Link>
 
                   <div className="space-y-3 border-t border-neutral-700 pt-4">
-                    <h4 className="mb-3 text-base font-medium">What&apos;s included:</h4>
+                    <h4 className="mb-3 text-base font-medium">{t("whatsIncluded")}</h4>
                     <ul className="space-y-2">
                       {plan.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-center gap-2">
